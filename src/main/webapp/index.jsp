@@ -2,20 +2,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>First servlet</title>
+    <title>start</title>
 </head>
 <body>
+<h1>
+    Добро пожаловать!
+</h1>
 <br/>
-<form action="controller" method="get">
-    <h1>Регистрация</h1>
-    <input type="hidden" name="command" value="register"/>
-    <input type="text" name="username" placeholder="User name"/>
-    <br/>
-    <input type="password" name="password" placeholder="Password"/>
-    <br/>
-    <input type="submit" value="Зарегистрироваться"/>
-    <br/>
-    ${error_msg}
-</form>
+<a href="login.jsp" >
+    <button type="button">Начать работу</button>
+</a>
 </body>
 </html>

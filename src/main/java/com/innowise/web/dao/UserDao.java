@@ -2,14 +2,10 @@ package com.innowise.web.dao;
 
 import com.innowise.web.entity.User;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface UserDao {
-    boolean add(User user);
+    Optional<User> findByUsername(String username);
 
-    boolean update(User user);
-
-    boolean delete(User user);
-
-    List<User> findAll();
+    boolean existsByUsername(String username);
 }

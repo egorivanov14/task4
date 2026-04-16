@@ -1,11 +1,13 @@
 package com.innowise.web.command;
 
+import com.innowise.web.command.impl.LoginCommand;
 import com.innowise.web.command.impl.LogoutCommand;
 import com.innowise.web.command.impl.RegisterCommand;
 
 public enum CommandType {
     REGISTER(new RegisterCommand()),
-    LOGOUT(new LogoutCommand());
+    LOGOUT(new LogoutCommand()),
+    LOGIN(new LoginCommand());
 
     private final Command command;
 

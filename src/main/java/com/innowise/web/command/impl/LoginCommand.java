@@ -1,7 +1,6 @@
 package com.innowise.web.command.impl;
 
 import com.innowise.web.command.Command;
-import com.innowise.web.servise.UserService;
 import com.innowise.web.servise.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
@@ -9,23 +8,24 @@ import org.apache.logging.log4j.Logger;
 
 import static com.innowise.web.config.PublicConstants.*;
 
-public class RegisterCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(RegisterCommand.class);
+public class LoginCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(LoginCommand.class);
     @Override
     public String execute(HttpServletRequest request) {
-        logger.info("RegisterCommand executing.");
-        UserService userService = UserServiceImpl.getInstance();
+        logger.info("LoginCommand executing.");
         String username = request.getParameter(USER_NAME_PARAMETER);
         String password = request.getParameter(PASSWORD_PARAMETER);
+        UserServiceImpl userService = UserServiceImpl.getInstance();
+        boolean result = userService.login(username, password);
         String page;
-        if (userService.register(username, password)) {
-            logger.info("RegisterCommand executed successfully.");
+        if(result){
+            logger.info("LoginCommand executed successfully.");
             request.setAttribute(USER_NAME_PARAMETER, username);
             page = MAIN_PAGE;
-        } else {
-            logger.info("RegisterCommand failed.");
-            request.setAttribute("error_msg", "user with this username already exists");
-            page = REGISTER_PAGE;
+        }else {
+            logger.info("LoginCommand failed.");
+            request.setAttribute("error_msg", "failed to login");
+            page = LOGIN_PAGE;
         }
         return page;
     }
