@@ -1,8 +1,8 @@
-package com.innowise.web.servise.impl;
+package com.innowise.web.service.impl;
 
 import com.innowise.web.dao.impl.UserDaoImpl;
 import com.innowise.web.entity.User;
-import com.innowise.web.servise.UserService;
+import com.innowise.web.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,4 +1,4 @@
-package com.innowise.web.servise;
+package com.innowise.web.service;
 
 public interface UserService {
     boolean register(String username, String password);

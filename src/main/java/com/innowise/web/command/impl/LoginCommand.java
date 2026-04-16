@@ -1,7 +1,7 @@
 package com.innowise.web.command.impl;
 
 import com.innowise.web.command.Command;
-import com.innowise.web.servise.impl.UserServiceImpl;
+import com.innowise.web.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
