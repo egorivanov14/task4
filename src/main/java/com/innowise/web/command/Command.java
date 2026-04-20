@@ -1,8 +1,10 @@
 package com.innowise.web.command;
 
+import com.innowise.web.controller.Router;
+import com.innowise.web.exception.CommandException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @FunctionalInterface
 public interface Command {
-    String execute(HttpServletRequest request);
+    Router execute(HttpServletRequest request) throws CommandException;
 }

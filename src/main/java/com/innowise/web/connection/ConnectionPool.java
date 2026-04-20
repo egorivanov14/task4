@@ -2,11 +2,11 @@ package com.innowise.web.connection;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.postgresql.Driver;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,14 +24,14 @@ public class ConnectionPool {
     private static final int CONNECTION_POOL_CAPACITY = 10;
     private static ConnectionPool instance;
     private static final Lock lock = new ReentrantLock();
-    private BlockingQueue<Connection> connectionPool;
+    private final BlockingQueue<Connection> connectionPool;
 
     static {
         try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
+            DriverManager.registerDriver(new Driver());
         } catch (SQLException e) {
-            logger.error("Failed to register db driver: {}",  e.getMessage());
-            throw new RuntimeException(e); //todo
+            logger.fatal("Failed to register db driver: {}", e.getMessage());
+            throw new ExceptionInInitializerError(e);
         }
     }
 
@@ -48,6 +48,11 @@ public class ConnectionPool {
                 logger.error("Failed to connect to data base: {}", e.getMessage());
             }
         }
+        if(connectionPool.size() < CONNECTION_POOL_CAPACITY){
+            logger.error("Connection pool is not full. Try to fix pool.");
+            tryToFixConnectionPool();
+        }
+        logger.info("Connection pool is created.");
     }
 
     public static ConnectionPool getInstance() {
@@ -64,12 +69,13 @@ public class ConnectionPool {
         return instance;
     }
 
-    public Optional<Connection> getConnection() {
-        Optional<Connection> connection = Optional.empty();
+    public Connection getConnection() {
+        Connection connection = null;
         try {
-            connection = Optional.of(connectionPool.take());
+            connection = connectionPool.take();
         } catch (InterruptedException e) {
-            logger.error("Failed to get connection from pool: {}", e.getMessage()); //todo
+            logger.error("Failed to get connection from pool: {}", e.getMessage());
+            Thread.currentThread().interrupt();
         }
         return connection;
     }
@@ -80,8 +86,49 @@ public class ConnectionPool {
             connectionPool.put(connection); //todo check connection
             result = true;
         } catch (InterruptedException e) {
-            logger.error("Failed to put connection to pool: {}", e.getMessage()); //todo
+            logger.error("Failed to put connection {} to pool: {}",connection.toString() , e.getMessage()); //todo
+            Thread.currentThread().interrupt();
         }
         return result;
     }
+
+    private void tryToFixConnectionPool(){
+        int brokeConnections = CONNECTION_POOL_CAPACITY - connectionPool.size();
+        Properties properties = new Properties();
+        properties.put(USER_PARAMETER, USER);
+        properties.put(PASSWORD_PARAMETER, PASSWORD);
+        for(int i = 0; i < brokeConnections; i++){
+            try {
+                Connection connection = DriverManager.getConnection(URL, properties);
+                connectionPool.add(connection);
+            } catch (SQLException e) {
+                logger.error("Failed to fix connection to data base: {}", e.getMessage());
+                throw new ExceptionInInitializerError(e);
+            }
+        }
+        logger.info("Connection pool is fixed.");
+    }
+
+    public void destroyPool() {
+        try {
+            for(int i = 0; i < CONNECTION_POOL_CAPACITY; i++) {
+                Connection connection = connectionPool.poll();
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Failed to destroy pool: {}", e.getMessage()); //todo
+        }
+    }
+
+    public void deregisterDriver() {
+        try{
+            java.sql.Driver driver = DriverManager.getDriver(URL); // todo search how to deregister correctly
+            DriverManager.deregisterDriver(driver);
+        } catch (SQLException e) {
+            logger.error("Failed to deregister driver: {}", e.getMessage());// todo
+        }
+    }
+
 }

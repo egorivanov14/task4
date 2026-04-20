@@ -1,7 +1,9 @@
 package com.innowise.web.service;
 
-public interface UserService {
-    boolean register(String username, String password);
+import com.innowise.web.exception.ServiceException;
 
-    boolean login(String username, String password);
+public interface UserService {
+    boolean register(String username, String password) throws ServiceException;
+
+    boolean login(String username, String password) throws ServiceException;
 }
