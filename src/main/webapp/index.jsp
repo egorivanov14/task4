@@ -9,8 +9,17 @@
     Добро пожаловать!
 </h1>
 <br/>
-<a href="login.jsp" >
-    <button type="button">Начать работу</button>
+<h3>
+    Есть аккаунт?
+</h3>
+<a href="pages/login.jsp" >
+    <button type="button">Войти</button>
+</a>
+<h3>
+    Впервые на сайте?
+</h3>
+<a href="pages/register.jsp">
+    <button type="button">Зарегистрироваться</button>
 </a>
 </body>
 </html>

@@ -6,7 +6,7 @@ import com.innowise.web.exception.DaoException;
 import java.util.Optional;
 
 public interface UserDao {
-    Optional<User> findByUsername(String username) throws DaoException;
+  Optional<User> findByUsername(String username) throws DaoException;
 
-    boolean existsByUsername(String username) throws DaoException;
+  boolean existsByUsername(String username) throws DaoException;
 }

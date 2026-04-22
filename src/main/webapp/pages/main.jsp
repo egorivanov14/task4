@@ -6,9 +6,9 @@
 </head>
 <body>
 <h1>
-    Авторизованный пользователь: ${username}
+    Аутентифицированный пользователь: ${username}
 </h1>
-<form action="controller" method="get">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <input type="hidden" name="command" value="logout">
     <input type="submit" value="Выйти"/>
 </form>

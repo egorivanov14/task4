@@ -5,7 +5,7 @@
     <title>registration</title>
 </head>
 <body>
-<form action="controller" method="get">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <h1>Регистрация</h1>
     <input type="hidden" name="command" value="register"/>
     <input type="text" name="username" placeholder="user name"/>
@@ -16,6 +16,6 @@
     <br/>
     ${error_msg}
 </form>
-<a href="login.jsp">Войти</a>
+<a href="${pageContext.request.contextPath}/pages/login.jsp">Войти</a>
 </body>
 </html>
