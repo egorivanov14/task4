@@ -20,19 +20,19 @@ public class RegisterCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.info("RegisterCommand executing.");
     UserService userService = UserServiceImpl.getInstance();
-    String username = request.getParameter(USER_NAME_PARAMETER);
+    String username = request.getParameter(USERNAME_PARAMETER);
     String password = request.getParameter(PASSWORD_PARAMETER);
-    HttpSession session = request.getSession();
     Router router = new Router();
     try {
       if (userService.register(username, password)) {
         logger.info("RegisterCommand executed successfully.");
-        session.setAttribute(USER_NAME_PARAMETER, username);
-        router.setPage(MAIN_PAGE);
-        router.setRedirect();
+        SetUserToSessionCommand setUserToSessionCommand = new SetUserToSessionCommand();
+        router = setUserToSessionCommand.execute(request);
+        HttpSession session = request.getSession();
+        session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + MAIN_PAGE);
       } else {
         logger.info("RegisterCommand failed.");
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "user with this username already exists");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "user with this username already exists or you wrote null values");
         router.setPage(REGISTER_PAGE);
         router.setForward();
       }

@@ -1,13 +1,17 @@
 package com.innowise.web.command;
 
-import com.innowise.web.command.impl.LoginCommand;
-import com.innowise.web.command.impl.LogoutCommand;
-import com.innowise.web.command.impl.RegisterCommand;
+import com.innowise.web.command.impl.*;
 
 public enum CommandType {
   REGISTER(new RegisterCommand()),
   LOGOUT(new LogoutCommand()),
-  LOGIN(new LoginCommand());
+  LOGIN(new LoginCommand()),
+  EDIT_ROLE(new EditRoleCommand()),
+  GET_USERS_LIST(new GetUsersListCommand()),
+  GET_PROFILE(new GetProfileCommand()),
+  DELETE_CURRENT_USER(new DeleteCurrentUserCommand()),
+  DELETE_USER_BY_ADMIN(new DeleteUserByAdminCommand()),
+  UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;
 

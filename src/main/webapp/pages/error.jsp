@@ -4,10 +4,11 @@
     <title>error</title>
 </head>
 <body>
-Упс... Что-то пошло не так.
+<p>Тип: ${requestScope['jakarta.servlet.error.exception_type']}</p>
 <br/>
-<a href="index.jsp">
-    <button type="button">Вернуться на начальную страницу</button>
+<p>Сообщение: ${requestScope['jakarta.servlet.error.message']}</p>
+<a href="${current_page}">
+    <button type="button">Вернуться на последнюю страницу</button>
 </a>
 </body>
 </html>

@@ -18,27 +18,25 @@ public class LoginCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.info("LoginCommand executing.");
-    String username = request.getParameter(USER_NAME_PARAMETER);
+    String username = request.getParameter(USERNAME_PARAMETER);
     String password = request.getParameter(PASSWORD_PARAMETER);
     UserServiceImpl userService = UserServiceImpl.getInstance();
-    boolean authenticated;
+    Router router = new Router();
     try {
-      authenticated = userService.login(username, password);
+      if (userService.login(username, password)) {
+        logger.info("LoginCommand executed successfully.");
+        SetUserToSessionCommand setUserToSessionCommand = new SetUserToSessionCommand();
+        router = setUserToSessionCommand.execute(request);
+        HttpSession session = request.getSession();
+        session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + MAIN_PAGE);
+      } else {
+        logger.info("LoginCommand failed.");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to login");
+        router.setPage(LOGIN_PAGE);
+        router.setForward();
+      }
     } catch (ServiceException e) {
       throw new CommandException(e);
-    }
-    HttpSession session = request.getSession();
-    Router router = new Router();
-    if (authenticated) {
-      logger.info("LoginCommand executed successfully.");
-      session.setAttribute(USER_NAME_PARAMETER, username);
-      router.setPage(MAIN_PAGE);
-      router.setRedirect();
-    } else {
-      logger.info("LoginCommand failed.");
-      request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to login");
-      router.setPage(LOGIN_PAGE);
-      router.setForward();
     }
     return router;
   }

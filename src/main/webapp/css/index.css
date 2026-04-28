@@ -1,0 +1,13 @@
+h1, h2{
+    background-color: aqua;
+}
+
+h3{
+    background-color: coral;
+    font-size: 20px;
+}
+
+.message{
+    background-color: blue;
+    font-size: 20px;
+}
