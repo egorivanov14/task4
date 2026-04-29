@@ -23,7 +23,7 @@ public class SetUserToSessionCommand implements Command {
     logger.info("SetUserToSessionCommand executing");
     UserServiceImpl userService = UserServiceImpl.getInstance();
     HttpSession session = request.getSession();
-    session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + LOGIN_PAGE);
+    session.setAttribute(CURRENT_PAGE_PARAMETER, LOGIN_PAGE);
     String username = request.getParameter(USERNAME_PARAMETER);
     try {
       Optional<UserDto> optionalUserDto = userService.getUserDto(username);

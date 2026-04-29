@@ -22,7 +22,7 @@ public class EditRoleCommand implements Command {
     logger.info("SetRoleCommand executing");
     UserService userService = getInstance();
     HttpSession session = request.getSession();
-    session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + EDIT_ROLE_PAGE);
+    session.setAttribute(CURRENT_PAGE_PARAMETER, EDIT_ROLE_PAGE);
     UserDto currentUser = (UserDto) session.getAttribute(USER_PARAMETER);
     try {
       String currentUserName = currentUser.getUsername();

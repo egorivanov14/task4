@@ -28,7 +28,7 @@ public class LoginCommand implements Command {
         SetUserToSessionCommand setUserToSessionCommand = new SetUserToSessionCommand();
         router = setUserToSessionCommand.execute(request);
         HttpSession session = request.getSession();
-        session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + MAIN_PAGE);
+        session.setAttribute(CURRENT_PAGE_PARAMETER, MAIN_PAGE);
       } else {
         logger.info("LoginCommand failed.");
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to login");

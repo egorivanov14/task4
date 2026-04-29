@@ -5,23 +5,24 @@ import com.innowise.web.controller.router.Router;
 import com.innowise.web.exception.CommandException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import static com.innowise.web.config.PublicConstants.CURRENT_PAGE_PARAMETER;
-import static com.innowise.web.config.PublicConstants.PROFILE_PAGE;
+import static com.innowise.web.config.PublicConstants.MAIN_PAGE;
 
-public class GetProfileCommand implements Command {
-  private static final Logger logger = LogManager.getLogger(GetProfileCommand.class);
-
+public class ReturnToPreviousPageCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
-    logger.info("GetProfileCommand executing");
     HttpSession session = request.getSession();
-    session.setAttribute(CURRENT_PAGE_PARAMETER, PROFILE_PAGE);
+    Object page = session.getAttribute(CURRENT_PAGE_PARAMETER);
+    String pageStr = page.toString();
+    String contextPath = request.getContextPath();
     Router router = new Router();
-    router.setPage(PROFILE_PAGE);
-    router.setForward();
+    if (pageStr != null && !pageStr.isBlank()) {
+      router.setPage(contextPath + page);
+    } else {
+      router.setPage(contextPath + MAIN_PAGE);
+    }
+    router.setRedirect();
     return router;
   }
 }

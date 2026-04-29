@@ -35,6 +35,10 @@ public class UserDto {
     return role.toString();
   }
 
+  public boolean isAdmin(){
+    return role.equals(Role.ROLE_ADMIN);
+  }
+
   @Override
   public String toString() {
     return "UserDto [id=" + id + ", username=" + username + ", role=" + role + "]";

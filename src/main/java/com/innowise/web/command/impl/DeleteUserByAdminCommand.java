@@ -20,7 +20,7 @@ public class DeleteUserByAdminCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.info("Entering DeleteUserByAdminCommand");
     HttpSession session = request.getSession();
-    session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + USERS_PAGE);
+    session.setAttribute(CURRENT_PAGE_PARAMETER, USERS_PAGE);
     UserService userService = UserServiceImpl.getInstance();
     String username = request.getParameter(USERNAME_PARAMETER);
     try {

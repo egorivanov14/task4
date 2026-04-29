@@ -29,7 +29,7 @@ public class RegisterCommand implements Command {
         SetUserToSessionCommand setUserToSessionCommand = new SetUserToSessionCommand();
         router = setUserToSessionCommand.execute(request);
         HttpSession session = request.getSession();
-        session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + MAIN_PAGE);
+        session.setAttribute(CURRENT_PAGE_PARAMETER, MAIN_PAGE);
       } else {
         logger.info("RegisterCommand failed.");
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "user with this username already exists or you wrote null values");

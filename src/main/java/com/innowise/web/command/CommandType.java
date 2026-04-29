@@ -11,6 +11,7 @@ public enum CommandType {
   GET_PROFILE(new GetProfileCommand()),
   DELETE_CURRENT_USER(new DeleteCurrentUserCommand()),
   DELETE_USER_BY_ADMIN(new DeleteUserByAdminCommand()),
+  RETURN_TO_PREVIOUS_PAGE(new ReturnToPreviousPageCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;

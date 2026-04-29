@@ -22,10 +22,10 @@ public class GetUsersListCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.info("GetUsersListCommand executing");
     HttpSession session = request.getSession(false);
-    session.setAttribute(CURRENT_PAGE_PARAMETER, request.getContextPath() + USERS_PAGE);
+    session.setAttribute(CURRENT_PAGE_PARAMETER, USERS_PAGE);
     UserServiceImpl userService = UserServiceImpl.getInstance();
     try {
-      List<UserDto> userDtoList = userService.getUserDtoList();
+      List<UserDto> userDtoList = userService.getUserDtoList();//todo to ask if admin role checking is required
       request.setAttribute(USERS_PARAMETER, userDtoList);
     } catch (ServiceException e) {
       logger.error(e.getMessage());
