@@ -67,6 +67,11 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
+  public boolean deleteById(Long id) throws DaoException {
+    return false;
+  }
+
+  @Override
   public List<Good> findAll() throws DaoException {
     logger.info("Finding all Goods");
     ConnectionPool connectionPool = ConnectionPool.getInstance();

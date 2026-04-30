@@ -9,6 +9,7 @@ public class PublicConstants {
   public static final String TO_USERNAME_PARAMETER = "to_username";
   public static final String CURRENT_PAGE_PARAMETER = "current_page";
   public static final String ROLE_PARAMETER = "role";
+  public static final String USER_ID_PARAMETER = "user_id";
   public static final String ERROR_MESSAGE_PARAMETER = "error_msg";
   public static final String EDIT_ROLE_PAGE = "/pages/admin/edit-role.jsp";
   public static final String USER_LIST_PAGE = "/pages/admin/user-list.jsp";

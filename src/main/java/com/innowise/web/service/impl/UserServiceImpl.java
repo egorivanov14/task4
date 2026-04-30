@@ -3,10 +3,10 @@ package com.innowise.web.service.impl;
 import com.innowise.web.dao.impl.UserDaoImpl;
 import com.innowise.web.dto.Converter;
 import com.innowise.web.dto.UserDto;
+import com.innowise.web.entity.Role;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
-import com.innowise.web.entity.Role;
 import com.innowise.web.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> getUsers() throws ServiceException {
-    logger.info("UserServiceImpl getUsers");
+    logger.info("Getting users");
     UserDaoImpl userDao = UserDaoImpl.getInstance();
     List<User> users;
     try {
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<UserDto> getUserDtoList() throws ServiceException {
-    logger.info("UserServiceImpl getUserDtoList");
+    logger.info("Getting users dto");
     List<User> users = getUsers();
     Converter converter = Converter.getInstance();
     return users.stream().map(converter::convertUserToDto).toList();
@@ -155,6 +155,16 @@ public class UserServiceImpl implements UserService {
     UserDaoImpl userDao = UserDaoImpl.getInstance();
     try {
       return userDao.deleteUserByUsername(username);
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
+  }
+
+  @Override
+  public boolean deleteUserById(Long id) throws ServiceException {
+    UserDaoImpl userDao = UserDaoImpl.getInstance();
+    try {
+      return userDao.deleteById(id);
     } catch (DaoException e) {
       throw new ServiceException(e);
     }

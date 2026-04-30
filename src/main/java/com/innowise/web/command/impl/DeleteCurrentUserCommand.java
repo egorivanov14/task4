@@ -22,18 +22,18 @@ public class DeleteCurrentUserCommand implements Command {
     logger.info("Entering DeleteCurrentUserCommand");
     HttpSession session = request.getSession();
     UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
-    logger.info("Deleting user {}", userDto.getUsername());
+    logger.info("Deleting user {}", userDto.getId());
     UserService userService = UserServiceImpl.getInstance();
     Router router = new Router();
-    String username = userDto.getUsername();
+    Long id = userDto.getId();
     try {
-      if (userService.deleteUserByUsername(username)) {
-        logger.info("User {} was successfully deleted", username);
+      if (userService.deleteUserById(id)) {
+        logger.info("User {} was successfully deleted", id);
         session.invalidate();
         router.setPage(request.getContextPath() + LOGIN_PAGE);
         router.setRedirect();
       } else {
-        logger.warn("User {} was not deleted", username);
+        logger.warn("User {} was not deleted", id);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to delete user, try again");
         router.setPage(PROFILE_PAGE);
         router.setForward();

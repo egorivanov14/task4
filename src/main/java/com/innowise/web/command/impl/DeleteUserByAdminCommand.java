@@ -2,18 +2,13 @@ package com.innowise.web.command.impl;
 
 import com.innowise.web.command.Command;
 import com.innowise.web.controller.router.Router;
-import com.innowise.web.dao.impl.UserDaoImpl;
-import com.innowise.web.dto.UserDto;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
 import com.innowise.web.service.UserService;
 import com.innowise.web.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 import static com.innowise.web.config.PublicConstants.*;
 
@@ -24,21 +19,17 @@ public class DeleteUserByAdminCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.info("Entering DeleteUserByAdminCommand");
     UserService userService = UserServiceImpl.getInstance();
-    String username = request.getParameter(USERNAME_PARAMETER);
+    String idString = request.getParameter(USER_ID_PARAMETER);
+    Long id = Long.parseLong(idString);
     try {
-      if (userService.deleteUserByUsername(username)) { //todo failed logic
-        List<UserDto> userDtoList = userService.getUserDtoList();
-        request.setAttribute(USER_LIST_PAGE, userDtoList);
-      }else {
-        logger.warn("User {} was not deleted", username);
+      if (!userService.deleteUserById(id)) { //todo need some log to success deleting
+        logger.warn("User {} was not deleted", id);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to delete user, try again");
       }
     } catch (ServiceException e) {
       throw new CommandException(e);
     }
-    Router router = new Router();
-    router.setPage(request.getContextPath() + USER_LIST_PAGE);
-    router.setForward();
-    return router;
+    GetUserListCommand getUserListCommand = new GetUserListCommand();
+    return getUserListCommand.execute(request);
   }
 }

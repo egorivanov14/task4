@@ -3,9 +3,9 @@ package com.innowise.web.dao.impl;
 import com.innowise.web.connection.ConnectionPool;
 import com.innowise.web.dao.AbstractDao;
 import com.innowise.web.dao.UserDao;
+import com.innowise.web.entity.Role;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
-import com.innowise.web.entity.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +29,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   private static final String DELETE_USER_BY_USER_NAME_SQL = "DELETE FROM users WHERE user_name = ?";
   private static final String UPDATE_USER_NAME_SQL = "UPDATE users SET user_name = ? WHERE id = ?";
   private static final String GET_USER_BY_ID_SQL = "SELECT u.id, u.user_name, u.password, r.role_name FROM users u INNER JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
+  private static final String DELETE_USER_BY_ID_SQL = "DELETE FROM users WHERE id = ?";
   private static UserDaoImpl instance;
 
   private UserDaoImpl() {
@@ -66,12 +67,31 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
   @Override
   public boolean update(User user) throws DaoException {
-    throw  new UnsupportedOperationException("Not supported yet.");
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
   public boolean delete(User user) throws DaoException {
-    throw  new UnsupportedOperationException("Not supported yet.");
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public boolean deleteById(Long id) throws DaoException {
+    logger.info("Delete user by id: {}", id);
+    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    Connection connection = connectionPool.getConnection();
+    boolean result = false;
+    try (PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID_SQL)) {
+      statement.setLong(1, id);
+      int resultSet = statement.executeUpdate();
+      result = resultSet > 0;
+    } catch (SQLException e) {
+      logger.error("Failed to delete user by id: {}. {}", id, e.getMessage());
+      throw new DaoException(e);
+    } finally {
+      connectionPool.releaseConnection(connection);
+    }
+    return result;
   }
 
   @Override

@@ -12,6 +12,8 @@ public abstract class AbstractDao<T> {
 
   public abstract boolean delete(T t) throws DaoException;
 
+  public abstract boolean deleteById(Long id) throws DaoException;
+
   public abstract List<T> findAll() throws DaoException;
 
   public abstract Optional<T> findById(Long id) throws DaoException;

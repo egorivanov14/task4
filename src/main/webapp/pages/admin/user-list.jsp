@@ -20,7 +20,7 @@
             <td>
                 <form action="${pageContext.request.contextPath}/controller" method="post">
                     <input type="hidden" name="command" value="delete_user_by_admin"/>
-                    <input type="hidden" name="username" value="${user.username}">
+                    <input type="hidden" name="user_id" value="${user.id}">
                     <input type="submit" value="удалить пользователя"/>
                 </form>
             </td>

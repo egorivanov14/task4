@@ -24,5 +24,7 @@ public interface UserService {
 
   boolean deleteUserByUsername(String username) throws ServiceException;
 
+  boolean deleteUserById(Long id) throws ServiceException;
+
   boolean updateUsername(Long id, String newUsername) throws ServiceException;
 }
