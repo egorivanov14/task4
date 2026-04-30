@@ -1,7 +1,5 @@
 package com.innowise.web.entity;
 
-import com.innowise.web.service.Role;
-
 public class User {
   private Long id;
   private String username;

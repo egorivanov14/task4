@@ -1,7 +1,7 @@
 package com.innowise.web.controller.filter;
 
 import com.innowise.web.dto.UserDto;
-import com.innowise.web.service.Role;
+import com.innowise.web.entity.Role;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;

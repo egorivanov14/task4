@@ -6,7 +6,13 @@
 </head>
 <body>
 <table>
-    <c:forEach var="user" items="${users}">
+    <tr>
+        <td>id</td>
+        <td>username</td>
+        <td>role</td>
+    </tr>
+    <hr/>
+    <c:forEach var="user" items="${user_list}">
         <tr>
             <td>${user.id}</td>
             <td>${user.username}</td>

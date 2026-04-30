@@ -1,6 +1,6 @@
 package com.innowise.web.dto;
 
-import com.innowise.web.service.Role;
+import com.innowise.web.entity.Role;
 
 public class UserDto {
   Long id;

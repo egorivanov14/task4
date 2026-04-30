@@ -5,7 +5,7 @@ import com.innowise.web.dao.AbstractDao;
 import com.innowise.web.dao.UserDao;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
-import com.innowise.web.service.Role;
+import com.innowise.web.entity.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,8 +52,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
       statement.setString(2, user.getPassword());
       Role role = user.getRole();
       statement.setInt(3, role.getRoleId());
-      statement.executeUpdate();
-      result = true;
+      int resultSet = statement.executeUpdate();
+      result = resultSet > 0;
     } catch (SQLException e) {
       logger.error("Failed to add user {}: {}", user.toString(), e.getMessage()); // todo
       throw new DaoException(e);
@@ -66,12 +66,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
   @Override
   public boolean update(User user) throws DaoException {
-    return false;
+    throw  new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
   public boolean delete(User user) throws DaoException {
-    return false;
+    throw  new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override

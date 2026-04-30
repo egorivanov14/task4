@@ -7,11 +7,13 @@ public enum CommandType {
   LOGOUT(new LogoutCommand()),
   LOGIN(new LoginCommand()),
   EDIT_ROLE(new EditRoleCommand()),
-  GET_USERS_LIST(new GetUsersListCommand()),
+  GET_USER_LIST(new GetUserListCommand()),
   GET_PROFILE(new GetProfileCommand()),
   DELETE_CURRENT_USER(new DeleteCurrentUserCommand()),
   DELETE_USER_BY_ADMIN(new DeleteUserByAdminCommand()),
   RETURN_TO_PREVIOUS_PAGE(new ReturnToPreviousPageCommand()),
+  GET_GOOD_LIST(new GetGoodListCommand()),
+  ADD_GOOD(new AddGoodCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;

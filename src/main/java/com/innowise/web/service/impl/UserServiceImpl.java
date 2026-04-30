@@ -6,7 +6,7 @@ import com.innowise.web.dto.UserDto;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
-import com.innowise.web.service.Role;
+import com.innowise.web.entity.Role;
 import com.innowise.web.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
 
-import static com.innowise.web.service.Role.defineRole;
+import static com.innowise.web.entity.Role.defineRole;
 
 public class UserServiceImpl implements UserService {
   private static final Logger logger = LogManager.getLogger(UserServiceImpl.class.getName());

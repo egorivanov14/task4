@@ -1,4 +1,4 @@
-package com.innowise.web.service;
+package com.innowise.web.entity;
 
 public enum Role {
   ROLE_USER(1),
