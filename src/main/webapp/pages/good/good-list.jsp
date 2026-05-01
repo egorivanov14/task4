@@ -14,9 +14,10 @@
         <td>quantity</td>
         <td>manufacturer</td>
         <td>description</td>
+        <td>added by</td>
     </tr>
     <hr/>
-    <c:forEach var="good" items="${good_list}">
+    <c:forEach var="good" items="${good_dto_list}">
         <tr>
             <td>${good.id}</td>
             <td>${good.name}</td>
@@ -24,6 +25,7 @@
             <td>${good.quantity}</td>
             <td>${good.manufacturer}</td>
             <td>${good.description}</td>
+            <td>${good.addedByUsername}</td>
         </tr>
     </c:forEach>
 </table>

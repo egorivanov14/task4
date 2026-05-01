@@ -15,7 +15,7 @@
 <ul>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_profile">Профиль пользователя</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_good_list">Список товаров</a></li>
-    <li><a href="${pageContext.request.contextPath}/pages/good/add-good.jsp">Добавить новый товар</a></li>
+    <li><a href="${pageContext.request.contextPath}/pages/good/add-good.jsp">Создать товар</a></li>
 </ul>
 <form action="${pageContext.request.contextPath}/controller" method="post">
     <input type="hidden" name="command" value="logout">

@@ -2,7 +2,7 @@ package com.innowise.web.command.impl;
 
 import com.innowise.web.command.Command;
 import com.innowise.web.controller.router.Router;
-import com.innowise.web.entity.Good;
+import com.innowise.web.dto.GoodDto;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
 import com.innowise.web.service.impl.GoodServiceImpl;
@@ -19,10 +19,10 @@ public class GetGoodListCommand implements Command {
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, GOOD_LIST_PAGE);
     GoodServiceImpl goodService = GoodServiceImpl.getInstance();
-    List<Good> goodList;
+    List<GoodDto> goodDtoList;
     try {
-      goodList = goodService.findAll();
-      request.setAttribute(GOOD_LIST_PARAMETER, goodList);
+      goodDtoList = goodService.findAllDto();
+      request.setAttribute(GOOD_DTO_LIST_PARAMETER, goodDtoList);
     } catch (ServiceException e) {
       throw new CommandException(e);
     }

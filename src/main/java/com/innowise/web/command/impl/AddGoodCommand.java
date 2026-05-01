@@ -2,6 +2,7 @@ package com.innowise.web.command.impl;
 
 import com.innowise.web.command.Command;
 import com.innowise.web.controller.router.Router;
+import com.innowise.web.dto.UserDto;
 import com.innowise.web.entity.Good;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
@@ -23,7 +24,9 @@ public class AddGoodCommand implements Command {
     Long quantity = Long.parseLong(quantityStr);
     String manufacturer = request.getParameter(MANUFACTURER_PARAMETER);
     String description = request.getParameter(DESCRIPTION_PARAMETER);
-    Good good = new Good(null, name, price, quantity, manufacturer, description);
+    UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
+    Long userId = userDto.getId();
+    Good good = new Good(name, price, quantity, manufacturer, description, userId);
     GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     try {
       if (goodService.add(good)) {

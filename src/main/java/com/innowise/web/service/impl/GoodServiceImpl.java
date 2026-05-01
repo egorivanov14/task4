@@ -1,6 +1,7 @@
 package com.innowise.web.service.impl;
 
 import com.innowise.web.dao.impl.GoodDaoImpl;
+import com.innowise.web.dto.GoodDto;
 import com.innowise.web.entity.Good;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
@@ -32,6 +33,16 @@ public class GoodServiceImpl implements GoodService {
       return goodDao.findAll();
     } catch (DaoException e) {
       logger.error(e);
+      throw new ServiceException(e);
+    }
+  }
+
+  @Override
+  public List<GoodDto> findAllDto() throws ServiceException {
+    GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+    try {
+      return goodDao.findAllGoodDto();
+    } catch (DaoException e) {
       throw new ServiceException(e);
     }
   }

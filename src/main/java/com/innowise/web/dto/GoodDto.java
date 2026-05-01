@@ -1,24 +1,22 @@
-package com.innowise.web.entity;
+package com.innowise.web.dto;
 
-public class Good {
+public class GoodDto {
   private Long id;
   private String name;
   private Long price;
   private Long quantity;
   private String description;
   private String manufacturer;
-  private Long addedBy;
+  private String addedByUsername;
 
-  public Good() {
-  }
-
-  public Good(String name, Long price, Long quantity, String manufacturer, String description, Long addedBy) {
+  public GoodDto(Long id, String name, Long price, Long quantity, String description, String manufacturer, String addedByUsername) {
+    this.id = id;
     this.name = name;
     this.price = price;
     this.quantity = quantity;
-    this.manufacturer = manufacturer;
     this.description = description;
-    this.addedBy = addedBy;
+    this.manufacturer = manufacturer;
+    this.addedByUsername = addedByUsername;
   }
 
   public Long getId() {
@@ -37,16 +35,16 @@ public class Good {
     return quantity;
   }
 
-  public String getManufacturer() {
-    return manufacturer;
-  }
-
   public String getDescription() {
     return description;
   }
 
-  public Long getAddedBy() {
-    return addedBy;
+  public String getManufacturer() {
+    return manufacturer;
+  }
+
+  public String getAddedByUsername() {
+    return addedByUsername;
   }
 
   public void setId(Long id) {
@@ -61,6 +59,10 @@ public class Good {
     this.price = price;
   }
 
+  public void setQuantity(Long quantity) {
+    this.quantity = quantity;
+  }
+
   public void setDescription(String description) {
     this.description = description;
   }
@@ -69,11 +71,7 @@ public class Good {
     this.manufacturer = manufacturer;
   }
 
-  public void setQuantity(Long quantity) {
-    this.quantity = quantity;
-  }
-
-  public void setAddedBy(Long addedBy) {
-    this.addedBy = addedBy;
+  public void setAddedByUsername(String addedByUsername) {
+    this.addedByUsername = addedByUsername;
   }
 }

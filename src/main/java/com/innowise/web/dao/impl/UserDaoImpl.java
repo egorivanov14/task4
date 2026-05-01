@@ -6,6 +6,7 @@ import com.innowise.web.dao.UserDao;
 import com.innowise.web.entity.Role;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
+import com.innowise.web.security.PasswordCoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

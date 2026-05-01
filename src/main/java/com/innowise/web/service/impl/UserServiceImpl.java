@@ -7,6 +7,7 @@ import com.innowise.web.entity.Role;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
+import com.innowise.web.security.PasswordCoder;
 import com.innowise.web.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService {
       boolean isUserExists = userDao.existsByUsername(username);
       if (!isUserExists) {
         logger.info("UserServiceImpl register user: {}", username);
-        userDao.add(new User(username, password));
+        String passwordHash = PasswordCoder.encode(password);
+        userDao.add(new User(username, passwordHash));
         isRegistered = true;
       }
     } catch (DaoException e) {
@@ -68,7 +70,7 @@ public class UserServiceImpl implements UserService {
         logger.info("UserServiceImpl login user: {}", username);
         User user = userOptional.get();
         String userPassword = user.getPassword();
-        isAuthenticated = userPassword.equals(password);
+        isAuthenticated = PasswordCoder.checkPassword(password, userPassword);
       }
     } catch (DaoException e) {
       throw new ServiceException(e);
