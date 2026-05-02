@@ -9,7 +9,7 @@
     <tr>
         <td>id</td>
         <td>username</td>
-        <td>role</td>
+        <td>roleId</td>
     </tr>
     <hr/>
     <c:forEach var="user" items="${user_list}">
@@ -27,6 +27,7 @@
         </tr>
     </c:forEach>
 </table>
+${error_msg}
 <a href="${pageContext.request.contextPath}/pages/users/main.jsp">На главную</a>
 </body>
 </html>

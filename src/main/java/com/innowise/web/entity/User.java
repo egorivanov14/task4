@@ -4,27 +4,22 @@ public class User {
   private Long id;
   private String username;
   private String password;
-  private Role role;
+  private int roleId;
 
   public User() {
   }
 
-  public User(String username, String password) {
-    this.username = username;
-    this.password = password;
-    role = Role.ROLE_USER;
-  }
-
-  public User(Long id, String username, String password, Role role) {
+  public User(Long id, String username, String password, int role) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.role = role;
+    this.roleId = role;
   }
 
   public Long getId() {
     return id;
   }
+
   public void setId(Long id) {
     this.id = id;
   }
@@ -45,14 +40,16 @@ public class User {
     this.password = password;
   }
 
-  public Role getRole() {
-    return role;
+  public int getRoleId() {
+    return roleId;
   }
-  public void setRole(String role) {}
+
+  public void setRoleId(String roleId) {
+  }
 
   @Override
   public String toString() {
-    return "User [id=" + id + ", username=" + username + " role=" + role + "]";
+    return "User [id=" + id + ", username=" + username + " roleId=" + roleId + "]";
   }
 
   @Override

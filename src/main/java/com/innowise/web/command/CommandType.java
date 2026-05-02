@@ -14,6 +14,8 @@ public enum CommandType {
   RETURN_TO_PREVIOUS_PAGE(new ReturnToPreviousPageCommand()),
   GET_GOOD_LIST(new GetGoodListCommand()),
   ADD_GOOD(new AddGoodCommand()),
+  GET_GOOD_DTO_LIST_BY_USER(new GetGoodDtoListByUserCommand()),
+  DELETE_GOOD_BY_ID(new DeleteGoodByIdCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;

@@ -6,5 +6,7 @@ import com.innowise.web.exception.DaoException;
 import java.util.List;
 
 public interface GoodDao {
-  List<GoodDto> findAllGoodDto() throws DaoException;
+  List<GoodDto> getGoodDtoListByUserId(Long userId) throws DaoException;
+
+  List<GoodDto> findAllWithUsername() throws DaoException;
 }

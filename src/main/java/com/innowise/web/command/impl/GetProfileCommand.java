@@ -16,7 +16,7 @@ public class GetProfileCommand implements Command {
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
-    logger.info("GetProfileCommand executing");
+    logger.debug("Navigating to user profile page");
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, PROFILE_PAGE);
     Router router = new Router();

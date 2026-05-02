@@ -16,14 +16,14 @@ class ConnectionFactory {
   private static final Logger logger = LogManager.getLogger(ConnectionFactory.class);
   private static final String USER = "postgres";
   private static final String PASSWORD = "admin";
-  static final String URL = "jdbc:postgresql://localhost:5432/users"; //todo create new DB
+  static final String URL = "jdbc:postgresql://localhost:5432/users"; //todo create private config
   private static ConnectionFactory instance;
 
   static {
     try {
       DriverManager.registerDriver(new Driver());
     } catch (SQLException e) {
-      logger.fatal("Failed to register db driver: {}", e.getMessage());
+      logger.fatal("Failed to register PostgreSQL JDBC driver", e);
       throw new ExceptionInInitializerError(e);
     }
   }

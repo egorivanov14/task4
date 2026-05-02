@@ -9,6 +9,8 @@ public class GoodDto {
   private String manufacturer;
   private String addedByUsername;
 
+  public GoodDto() {}
+
   public GoodDto(Long id, String name, Long price, Long quantity, String description, String manufacturer, String addedByUsername) {
     this.id = id;
     this.name = name;

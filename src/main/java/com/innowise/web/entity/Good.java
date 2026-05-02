@@ -12,7 +12,8 @@ public class Good {
   public Good() {
   }
 
-  public Good(String name, Long price, Long quantity, String manufacturer, String description, Long addedBy) {
+  public Good(Long id, String name, Long price, Long quantity, String manufacturer, String description, Long addedBy) {
+    this.id = id;
     this.name = name;
     this.price = price;
     this.quantity = quantity;

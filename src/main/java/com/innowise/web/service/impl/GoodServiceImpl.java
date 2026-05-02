@@ -26,11 +26,11 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<Good> findAll() throws ServiceException {
-    logger.info("Finding all goods");
-    GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+  public List<GoodDto> findAllWithUsername() throws ServiceException {
+    logger.debug("Fetching all goods with usernames");
     try {
-      return goodDao.findAll();
+      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+      return goodDao.findAllWithUsername();
     } catch (DaoException e) {
       logger.error(e);
       throw new ServiceException(e);
@@ -38,21 +38,32 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<GoodDto> findAllDto() throws ServiceException {
-    GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+  public boolean add(Good good) throws ServiceException {
+    logger.debug("Adding good: {}", good.getName());
     try {
-      return goodDao.findAllGoodDto();
+      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+      return goodDao.add(good);
     } catch (DaoException e) {
       throw new ServiceException(e);
     }
   }
 
   @Override
-  public boolean add(Good good) throws ServiceException {
-    logger.info("Adding good");
-    GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
-    try {
-      return goodDao.add(good);
+  public boolean deleteById(Long id) throws ServiceException {
+    logger.debug("Deleting good by ID: {}", id);
+    try{
+      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+      return goodDao.deleteById(id);
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
+  }
+
+  @Override
+  public List<GoodDto> getGoodDtoListByUserId(Long userId) throws ServiceException {
+    try{
+      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+      return goodDao.getGoodDtoListByUserId(userId);
     } catch (DaoException e) {
       throw new ServiceException(e);
     }

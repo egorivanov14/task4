@@ -9,32 +9,40 @@ import com.innowise.web.exception.ServiceException;
 import com.innowise.web.service.impl.GoodServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.innowise.web.config.PublicConstants.*;
 
 public class AddGoodCommand implements Command {
+  private static final Logger logger = LogManager.getLogger(AddGoodCommand.class);
+
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
+    logger.debug("Executing AddGoodCommand");
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, ADD_GOOD_PAGE);
-    String name = request.getParameter(NAME_PARAMETER);
-    String priceStr = request.getParameter(PRICE_PARAMETER);
-    Long price = Long.parseLong(priceStr);
-    String quantityStr = request.getParameter(QUANTITY_PARAMETER);
-    Long quantity = Long.parseLong(quantityStr);
-    String manufacturer = request.getParameter(MANUFACTURER_PARAMETER);
-    String description = request.getParameter(DESCRIPTION_PARAMETER);
-    UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
-    Long userId = userDto.getId();
-    Good good = new Good(name, price, quantity, manufacturer, description, userId);
-    GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     try {
+      String name = request.getParameter(NAME_PARAMETER);
+      String priceStr = request.getParameter(PRICE_PARAMETER);
+      Long price = Long.parseLong(priceStr);
+      String quantityStr = request.getParameter(QUANTITY_PARAMETER);
+      Long quantity = Long.parseLong(quantityStr);
+      String manufacturer = request.getParameter(MANUFACTURER_PARAMETER);
+      String description = request.getParameter(DESCRIPTION_PARAMETER);
+      UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
+      Long userId = userDto.getId();
+      Good good = new Good(null, name, price, quantity, manufacturer, description, userId);
+      GoodServiceImpl goodService = GoodServiceImpl.getInstance();
       if (goodService.add(good)) {
+        logger.info("Good '{}' successfully added by user ID: {}", name, userId);
         request.setAttribute(MESSAGE_PARAMETER, "good added");
       } else {
+        logger.warn("Failed to add good '{}' for user ID: {}", name, userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good");
       }
     } catch (ServiceException e) {
+      logger.error("Service error during good addition", e);
       throw new CommandException(e);
     }
     Router router = new Router();

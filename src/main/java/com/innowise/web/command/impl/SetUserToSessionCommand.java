@@ -20,22 +20,23 @@ public class SetUserToSessionCommand implements Command {
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
-    logger.info("SetUserToSessionCommand executing");
     UserServiceImpl userService = UserServiceImpl.getInstance();
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, LOGIN_PAGE);
     String username = request.getParameter(USERNAME_PARAMETER);
+    logger.debug("Binding user '{}' to session", username);
     try {
       Optional<UserDto> optionalUserDto = userService.getUserDto(username);
       if (optionalUserDto.isPresent()) {
-        logger.info("User set in session");
         UserDto userDto = optionalUserDto.get();
         session.setAttribute(USER_PARAMETER, userDto);
+        logger.debug("User '{}' successfully bound to session", userDto.getUsername());
       } else {
+        logger.warn("User '{}' not found during session binding", username);
         throw new CommandException("User not found");
       }
     } catch (ServiceException e) {
-      logger.error(e.getMessage());
+      logger.error("Failed to fetch user data for session binding: '{}'", username, e);
       throw new CommandException(e);
     }
     Router router = new Router();

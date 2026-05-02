@@ -20,7 +20,12 @@ public class PublicConstants {
   public static final String GOOD_LIST_PAGE = "/pages/good/good-list.jsp";
   public static final String MESSAGE_PARAMETER = "message";
   public static final String ADD_GOOD_PAGE = "/pages/good/add-good.jsp";
+  public static final String GOOD_LIST_PARAMETER = "good_list";
   public static final String GOOD_DTO_LIST_PARAMETER = "good_dto_list";
+  public static final String ADDED_BY_PARAMETER = "added_by";
+  public static final String ROLE_ID_PARAMETER = "role_id";
+  public static final String GOOD_LIST_BY_USER_PAGE = "/pages/good/good-list-by-user.jsp";
+  public static final String GOOD_ID_PARAMETER = "good_id";
   public static final String NAME_PARAMETER = "name";
   public static final String PRICE_PARAMETER = "price";
   public static final String QUANTITY_PARAMETER = "quantity";

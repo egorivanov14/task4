@@ -15,6 +15,15 @@ public enum Role {
     return role.roleId;
   }
 
+  public static Role defineRole(int roleId) {
+    for(Role role : Role.values()) {
+      if(role.roleId == roleId) {
+        return role;
+      }
+    }
+    return Role.ROLE_USER;
+  }
+
   public int getRoleId() {
     return roleId;
   }

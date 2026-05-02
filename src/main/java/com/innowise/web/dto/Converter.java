@@ -1,9 +1,7 @@
 package com.innowise.web.dto;
 
+import com.innowise.web.entity.Role;
 import com.innowise.web.entity.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Converter {
   private static Converter instance;
@@ -21,7 +19,9 @@ public class Converter {
     UserDto userDto = new UserDto();
     userDto.setId(user.getId());
     userDto.setUsername(user.getUserName());
-    userDto.setRole(user.getRole());
+    int roleId = user.getRoleId();
+    Role role = Role.defineRole(roleId);
+    userDto.setRole(role);
     return userDto;
   }
 }

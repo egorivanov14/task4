@@ -30,17 +30,17 @@ public class ConnectionPool {
         Connection connection = connectionFactory.getConnection();
         freeConnections.add(connection);
       } catch (SQLException e) {
-        logger.error("Failed to connect to data base: {}", e.getMessage());
+        logger.error("Failed to initialize database connection #{}", i, e);
       }
     }
     if (freeConnections.isEmpty()) {
-      logger.fatal("Something wrong with db. Impossible to make connection to db.");
+      logger.fatal("Connection pool initialization failed: zero connections available");
       throw new ExceptionInInitializerError();
     } else if (freeConnections.size() < CONNECTION_POOL_CAPACITY) {
-      logger.error("Connection pool is not full. Try to fix pool.");
+      logger.warn("Connection pool partially initialized. Attempting recovery...");
       tryToFixConnectionPool();
     }
-    logger.info("Connection pool created.");
+    logger.info("Connection pool initialized with {} connections", freeConnections.size());
   }
 
   public static ConnectionPool getInstance() {
@@ -62,6 +62,7 @@ public class ConnectionPool {
     try {
       connection = freeConnections.take();
       usingConnections.put(connection);
+      logger.debug("Connection acquired. Active: {}, Free: {}", usingConnections.size(), freeConnections.size());
     } catch (InterruptedException e) {
       logger.error("Failed to get connection from pool: {}", e.getMessage());
       Thread.currentThread().interrupt();
@@ -73,9 +74,10 @@ public class ConnectionPool {
     try {
       if(usingConnections.remove(connection)) {
         freeConnections.put(connection); // todo. do something with wrong connection
+        logger.debug("Connection released. Active: {}, Free: {}", usingConnections.size(), freeConnections.size());
       }
     } catch (InterruptedException e) {
-      logger.error("Failed to put connection {} to pool: {}", connection.toString(), e.getMessage());
+      logger.error("Failed to return connection to pool", e);
       Thread.currentThread().interrupt();
     }
   }
@@ -88,14 +90,15 @@ public class ConnectionPool {
         Connection connection = connectionFactory.getConnection();
         freeConnections.add(connection);
       } catch (SQLException e) {
-        logger.error("Failed to fix connection to data base: {}", e.getMessage());
+        logger.error("Failed to recover database connection during pool fix", e);
         throw new ExceptionInInitializerError(e);
       }
     }
-    logger.info("Connection pool fixed.");
+    logger.info("Connection pool successfully recovered to {} connections", freeConnections.size());
   }
 
   public void destroyPool() {
+    logger.info("Shutting down connection pool...");
     try {
       for (int i = 0; i < CONNECTION_POOL_CAPACITY; i++) {
         Connection connection = freeConnections.poll();
@@ -103,19 +106,19 @@ public class ConnectionPool {
           connection.close();
         }
       }
+      logger.info("All connections closed successfully");
     } catch (SQLException e) {
-      logger.error("Failed to destroy pool: {}", e.getMessage()); //todo
+      logger.error("Failed to close one or more connections during pool destruction", e); //todo
     }
-    logger.info("Connection pool destroyed.");
   }
 
   public void deregisterDriver() {
     try {
-      java.sql.Driver driver = DriverManager.getDriver(URL); // todo search how to deregister correctly
+      java.sql.Driver driver = DriverManager.getDriver(URL);
       DriverManager.deregisterDriver(driver);
+      logger.info("JDBC driver deregistered");
     } catch (SQLException e) {
-      logger.error("Failed to deregister driver: {}", e.getMessage());// todo
+      logger.error("Failed to deregister JDBC driver", e);//todo
     }
-    logger.info("Connection pool driver deregistered.");
   }
 }

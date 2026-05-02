@@ -21,17 +21,16 @@ public class AdminAccessFilter implements Filter {
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    logger.info("AdminAccessFilter Called");
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     HttpServletResponse httpServletResponse = (HttpServletResponse) response;
     HttpSession httpSession = httpServletRequest.getSession(false);
     UserDto user = (UserDto) httpSession.getAttribute(USER_PARAMETER);
-    logger.info("AdminAccessFilter Called for user: {}", user.getUsername());
     Role role = user.getRole();
     if (role.equals(Role.ROLE_ADMIN)) {
+      logger.debug("Admin access granted for user: {}", user.getUsername());
       chain.doFilter(request, response);
     } else {
-      logger.info("User {} tried to access admin resource. Redirecting him to main page", user.getUsername());
+      logger.warn("Access denied for user: {}", user.getUsername());
       httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + MAIN_PAGE);
     }
   }

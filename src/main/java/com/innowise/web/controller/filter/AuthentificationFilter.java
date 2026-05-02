@@ -26,8 +26,10 @@ public class AuthentificationFilter implements Filter {
     HttpSession session = httpRequest.getSession(false);
     UserDto user = (UserDto) session.getAttribute(USER_PARAMETER);
     if (session != null && user != null) {
+      logger.debug("Authentication check passed successfully for user: {}", user.getUsername());
       chain.doFilter(request, response);
     } else {
+      logger.warn("Authentication failed or session expired");//todo
       httpResponse.sendRedirect(httpRequest.getContextPath() + LOGIN_PAGE);
     }
   }

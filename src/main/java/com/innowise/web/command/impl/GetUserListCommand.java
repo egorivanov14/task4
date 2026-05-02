@@ -20,15 +20,16 @@ public class GetUserListCommand implements Command {
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
-    logger.info("GetUsersListCommand executing");
+    logger.debug("Executing GetUserListCommand");
     HttpSession session = request.getSession(false);
     session.setAttribute(CURRENT_PAGE_PARAMETER, USER_LIST_PAGE);
     UserServiceImpl userService = UserServiceImpl.getInstance();
     try {
-      List<UserDto> userDtoList = userService.getUserDtoList();//todo to ask if admin role checking is required
+      List<UserDto> userDtoList = userService.getUserDtoList();//todo ask if admin role checking is required
       request.setAttribute(USER_LIST_PARAMETER, userDtoList);
+      logger.debug("Successfully retrieved {} users for admin list", userDtoList.size());
     } catch (ServiceException e) {
-      logger.error(e.getMessage());
+      logger.error("Failed to fetch user list", e);
       throw new CommandException(e);
     }
     Router router = new Router();

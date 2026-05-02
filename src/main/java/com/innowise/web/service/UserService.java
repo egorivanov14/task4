@@ -12,7 +12,7 @@ public interface UserService {
 
   boolean login(String username, String password) throws ServiceException;
 
-  boolean setRole(String adminUsername, String toUsername, String role) throws ServiceException;
+  boolean setRole(UserDto admin, String toUsername, String role) throws ServiceException;
 
   Optional<User> getUser(String username) throws ServiceException;
 

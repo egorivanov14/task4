@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="30">
-
     <Properties>
         <Property name="logDir">C:\Users\Admin\IdeaProjects\task4\logs</Property>
         <Property name="logPattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger{36} - %msg%n</Property>
     </Properties>
-
     <Appenders>
-        <RollingFile name="RollingFile" fileName="${logDir}/app.log"
-                     filePattern="${logDir}/app-%d{yyyy-MM-dd}-%i.log">
+        <!-- Добавлен для отображения логов в консоли IDE -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logPattern}"/>
+        </Console>
+
+        <RollingFile name="RollingFile" fileName="${logDir}/app.log" filePattern="${logDir}/app-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="${logPattern}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -16,8 +18,8 @@
             </Policies>
             <DefaultRolloverStrategy max="30"/>
         </RollingFile>
-        <RollingFile name="ErrorFile" fileName="${logDir}/error.log"
-                     filePattern="${logDir}/error-%d{yyyy-MM-dd}-%i.log">
+
+        <RollingFile name="ErrorFile" fileName="${logDir}/error.log" filePattern="${logDir}/error-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="${logPattern}"/>
             <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <Policies>
@@ -27,12 +29,15 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="com.innovise.web" level="DEBUG" additivity="false">
+        <!-- ИСПРАВЛЕНО: com.innowise.web (две n) -->
+        <Logger name="com.innowise.web" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="ErrorFile"/>
         </Logger>
 
         <Root level="INFO">
+            <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="ErrorFile"/>
         </Root>
