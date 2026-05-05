@@ -17,4 +17,6 @@ public abstract class AbstractDao<T> {
   public abstract List<T> findAll() throws DaoException;
 
   public abstract Optional<T> findById(Long id) throws DaoException;
+
+  public abstract boolean existsById(Long id) throws DaoException;
 }

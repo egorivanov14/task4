@@ -1,7 +1,9 @@
 package com.innowise.web.service.impl;
 
 import com.innowise.web.dao.impl.GoodDaoImpl;
+import com.innowise.web.dto.GoodDetailDto;
 import com.innowise.web.dto.GoodDto;
+import com.innowise.web.dto.converter.GoodConverter;
 import com.innowise.web.entity.Good;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
@@ -10,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 
 public class GoodServiceImpl implements GoodService {
   private static final Logger logger = LogManager.getLogger(GoodServiceImpl.class);
@@ -26,7 +29,7 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<GoodDto> findAllWithUsername() throws ServiceException {
+  public List<GoodDetailDto> findAllWithUsername() throws ServiceException {
     logger.debug("Fetching all goods with usernames");
     try {
       GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
@@ -51,7 +54,7 @@ public class GoodServiceImpl implements GoodService {
   @Override
   public boolean deleteById(Long id) throws ServiceException {
     logger.debug("Deleting good by ID: {}", id);
-    try{
+    try {
       GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
       return goodDao.deleteById(id);
     } catch (DaoException e) {
@@ -60,10 +63,34 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<GoodDto> getGoodDtoListByUserId(Long userId) throws ServiceException {
-    try{
+  public List<GoodDto> findAllGoodDto() throws ServiceException {//todo logs
+    GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+    try {
+      List<Good> goodList = goodDao.findAll();
+      GoodConverter goodConverter = new GoodConverter();
+      return goodList.stream().map(goodConverter::toDto).toList();
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
+  }
+
+  @Override
+  public Optional<Good> findById(Long id) throws ServiceException {
+    try {
       GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
-      return goodDao.getGoodDtoListByUserId(userId);
+      return goodDao.findById(id);
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
+  }
+
+  @Override
+  public List<GoodDto> getGoodDtoListByUserId(Long userId) throws ServiceException {
+    try {
+      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+      List<Good> goodList = goodDao.findAllByAddedBy(userId);
+      GoodConverter goodConverter = new GoodConverter();
+      return goodList.stream().map(goodConverter::toDto).toList();
     } catch (DaoException e) {
       throw new ServiceException(e);
     }

@@ -12,10 +12,11 @@ public enum CommandType {
   DELETE_CURRENT_USER(new DeleteCurrentUserCommand()),
   DELETE_USER_BY_ADMIN(new DeleteUserByAdminCommand()),
   RETURN_TO_PREVIOUS_PAGE(new ReturnToPreviousPageCommand()),
-  GET_GOOD_LIST(new GetGoodListCommand()),
+  GET_GOOD_DETAIL_LIST(new GetGoodDetailListCommand()),
   ADD_GOOD(new AddGoodCommand()),
   GET_GOOD_DTO_LIST_BY_USER(new GetGoodDtoListByUserCommand()),
-  DELETE_GOOD_BY_ID(new DeleteGoodByIdCommand()),
+  DELETE_GOOD(new DeleteGoodCommand()),
+  DELETE_GOOD_BY_ADMIN(new DeleteGoodByAdminCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;

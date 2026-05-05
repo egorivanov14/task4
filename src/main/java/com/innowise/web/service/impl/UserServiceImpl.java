@@ -1,8 +1,8 @@
 package com.innowise.web.service.impl;
 
 import com.innowise.web.dao.impl.UserDaoImpl;
-import com.innowise.web.dto.Converter;
 import com.innowise.web.dto.UserDto;
+import com.innowise.web.dto.converter.UserConverter;
 import com.innowise.web.entity.Role;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
@@ -121,8 +121,8 @@ public class UserServiceImpl implements UserService {
     Optional<UserDto> userDtoOptional = Optional.empty();
     if (userOptional.isPresent()) {
       logger.debug("Found user: {}", username);
-      Converter converter = Converter.getInstance();
-      userDtoOptional = userOptional.map(converter::convertUserToDto);
+      UserConverter userConverter = new UserConverter();
+      userDtoOptional = userOptional.map(userConverter::toDto);
     }
     return userDtoOptional;
   }
@@ -141,8 +141,8 @@ public class UserServiceImpl implements UserService {
   public List<UserDto> getUserDtoList() throws ServiceException {
     logger.debug("Fetching all user DTOs");
     List<User> users = getUsers();
-    Converter converter = Converter.getInstance();
-    return users.stream().map(converter::convertUserToDto).toList();
+    UserConverter userConverter = new UserConverter();
+    return users.stream().map(userConverter::toDto).toList();
   }
 
   @Override

@@ -2,7 +2,7 @@ package com.innowise.web.command.impl;
 
 import com.innowise.web.command.Command;
 import com.innowise.web.controller.router.Router;
-import com.innowise.web.dto.GoodDto;
+import com.innowise.web.dto.GoodDetailDto;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
 import com.innowise.web.service.impl.GoodServiceImpl;
@@ -15,27 +15,27 @@ import java.util.List;
 
 import static com.innowise.web.config.PublicConstants.*;
 
-public class GetGoodListCommand implements Command {
-  private static final Logger logger = LogManager.getLogger(GetGoodListCommand.class);
+public class GetGoodDetailListCommand implements Command {
+  private static final Logger logger = LogManager.getLogger(GetGoodDetailListCommand.class);
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing GetGoodListCommand");
     HttpSession session = request.getSession();
-    session.setAttribute(CURRENT_PAGE_PARAMETER, GOOD_LIST_PAGE);
+    session.setAttribute(CURRENT_PAGE_PARAMETER, GOOD_DETAIL_LIST_PAGE);
     GoodServiceImpl goodService = GoodServiceImpl.getInstance();
-    List<GoodDto> goodDtoList;
+    List<GoodDetailDto> goodDetailDtoList;
     try {
-      goodDtoList = goodService.findAllWithUsername();
-      request.setAttribute(GOOD_DTO_LIST_PARAMETER, goodDtoList);
-      logger.debug("Successfully retrieved {} goods for global list", goodDtoList.size());
+      goodDetailDtoList = goodService.findAllWithUsername();
+      request.setAttribute(GOOD_DETAIL_DTO_LIST_PARAMETER, goodDetailDtoList);
+      logger.debug("Successfully retrieved {} goods for global list", goodDetailDtoList.size());
     } catch (ServiceException e) {
       logger.error("Failed to fetch global goods list", e);
       throw new CommandException(e);
     }
     Router router = new Router();
     router.setForward();
-    router.setPage(GOOD_LIST_PAGE);
+    router.setPage(GOOD_DETAIL_LIST_PAGE);
     return router;
   }
 }

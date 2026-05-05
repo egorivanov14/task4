@@ -5,11 +5,13 @@
     <title>Title</title>
 </head>
 <body>
+<h1>Ваши товары</h1>
 <table>
     <tr>
         <td>name</td>
         <td>price</td>
         <td>quantity</td>
+        <td>description</td>
         <td>manufacturer</td>
     </tr>
     <hr/>
@@ -18,10 +20,11 @@
             <td>${good.name}</td>
             <td>${good.price}</td>
             <td>${good.quantity}</td>
+            <td>${good.description}</td>
             <td>${good.manufacturer}</td>
             <td>
                 <form action="${pageContext.request.contextPath}/controller" method="post">
-                    <input type="hidden" name = "command" value="delete_good_by_id"/>
+                    <input type="hidden" name = "command" value="delete_good"/>
                     <input type="hidden" name="good_id"  value="${good.id}"/>
                     <input type="submit" value="удалить"/>
                 </form>

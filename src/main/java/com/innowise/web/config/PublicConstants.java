@@ -1,5 +1,7 @@
 package com.innowise.web.config;
 
+import java.util.List;
+
 public class PublicConstants {
   public static final String USER_PARAMETER = "user";
   public static final String PASSWORD_PARAMETER = "password";
@@ -17,11 +19,12 @@ public class PublicConstants {
   public static final String REGISTER_PAGE = "/pages/start/register.jsp";
   public static final String MAIN_PAGE = "/pages/users/main.jsp";
   public static final String PROFILE_PAGE = "/pages/users/profile.jsp";
-  public static final String GOOD_LIST_PAGE = "/pages/good/good-list.jsp";
+  public static final String GOOD_DETAIL_LIST_PAGE = "/pages/admin/good-detail-list.jsp";
   public static final String MESSAGE_PARAMETER = "message";
   public static final String ADD_GOOD_PAGE = "/pages/good/add-good.jsp";
   public static final String GOOD_LIST_PARAMETER = "good_list";
   public static final String GOOD_DTO_LIST_PARAMETER = "good_dto_list";
+  public static final String GOOD_DETAIL_DTO_LIST_PARAMETER = "good_detail_dto_list";
   public static final String ADDED_BY_PARAMETER = "added_by";
   public static final String ROLE_ID_PARAMETER = "role_id";
   public static final String GOOD_LIST_BY_USER_PAGE = "/pages/good/good-list-by-user.jsp";
@@ -36,4 +39,6 @@ public class PublicConstants {
   public static final int ROLE_ADMIN_ID = 2;
   public static final String ROLE_NAME_PARAMETER = "role_name";
   public static final String ID_PARAMETER = "id";
+  public static final String COMMAND_PARAMETER = "command";
+  public static final List<String> ADMIN_COMMAND_LIST = List.of("delete_good_by_admin", "edit_role", "delete_user_by_admin");
 }

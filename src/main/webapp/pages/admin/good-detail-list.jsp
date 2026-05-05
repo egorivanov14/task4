@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Список доступных товаров</h1>
+<h1>Список всех товаров</h1>
 <table>
     <tr>
         <td>id</td>
@@ -17,7 +17,7 @@
         <td>added by</td>
     </tr>
     <hr/>
-    <c:forEach var="good" items="${good_dto_list}">
+    <c:forEach var="good" items="${good_detail_dto_list}">
         <tr>
             <td>${good.id}</td>
             <td>${good.name}</td>
@@ -26,6 +26,13 @@
             <td>${good.manufacturer}</td>
             <td>${good.description}</td>
             <td>${good.addedByUsername}</td>
+            <td>
+                <form action="${pageContext.request.contextPath}/controller" method="post">
+                    <input type="hidden" name = "command" value="delete_good_by_admin"/>
+                    <input type="hidden" name="good_id"  value="${good.id}"/>
+                    <input type="submit" value="удалить"/>
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>

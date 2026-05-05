@@ -30,6 +30,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   private static final String UPDATE_USER_NAME_SQL = "UPDATE users SET user_name = ? WHERE id = ?";
   private static final String GET_USER_BY_ID_SQL = "SELECT id, user_name, password, role_id FROM users WHERE id = ?";
   private static final String DELETE_USER_BY_ID_SQL = "DELETE FROM users WHERE id = ?";
+  private static final String EXISTS_BY_ID_SQL = "SELECT EXISTS (SELECT 1 FROM users WHERE user_name = ?)";
+  private static final String EXISTS_BY_USERNAME_SQL = "SELECT EXISTS (SELECT 1 FROM users WHERE user_name = ?)";
 
   private UserDaoImpl() {
   }
@@ -135,6 +137,22 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   }
 
   @Override
+  public boolean existsById(Long id) throws DaoException { // todo logs
+    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    Connection connection = connectionPool.getConnection();
+    try (PreparedStatement statement = connection.prepareStatement(EXISTS_BY_ID_SQL)) {
+      ResultSet resultSet = statement.executeQuery();
+      boolean exists = false;
+      if (resultSet.next()) {
+        exists = resultSet.getBoolean(1);
+      }
+      return exists;
+    } catch (SQLException e) {
+      throw new DaoException(e);
+    }
+  }
+
+  @Override
   public Optional<User> findByUsername(String username) throws DaoException {
     logger.debug("Fetching user by username: {}", username);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -159,17 +177,16 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   }
 
   @Override
-  public boolean existsByUsername(String username) throws DaoException {
+  public boolean existsByUsername(String username) throws DaoException {//todo logs
     logger.debug("Checking existence of user: {}", username);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
-    try (PreparedStatement statement = connection.prepareStatement(COUNT_USERS_BY_USER_NAME_SQL)) {
+    try (PreparedStatement statement = connection.prepareStatement(EXISTS_BY_USERNAME_SQL)) {
       statement.setString(1, username);
       try (ResultSet resultSet = statement.executeQuery()) {
         boolean exists = false;
         if (resultSet.next()) {
-          logger.debug("User {} exists.", username);
-          exists = true;
+          exists = resultSet.getBoolean(1);
         }
         return exists;
       }
