@@ -5,7 +5,7 @@
     <title>goods</title>
 </head>
 <body>
-<h1>Ваши товары</h1>
+<h1>Маркетплейс</h1>
 <table>
     <tr>
         <td>name</td>
@@ -14,7 +14,6 @@
         <td>description</td>
         <td>manufacturer</td>
     </tr>
-    <hr/>
     <c:forEach var="good" items="${good_dto_list}">
         <tr>
             <td>${good.name}</td>
@@ -22,13 +21,11 @@
             <td>${good.quantity}</td>
             <td>${good.description}</td>
             <td>${good.manufacturer}</td>
-            <td>
-                <form action="${pageContext.request.contextPath}/controller" method="post">
-                    <input type="hidden" name = "command" value="delete_good"/>
-                    <input type="hidden" name="good_id"  value="${good.id}"/>
-                    <input type="submit" value="удалить"/>
-                </form>
-            </td>
+            <td><form action="${pageContext.request.contextPath}/controller" method="post">
+                <input type="hidden" name="command" value="add_shopping_cart_item"/>
+                <input type="hidden" name="good_id" value="${good.id}"/>
+                <input type="submit" value="добавить в корзину"/>
+            </form></td>
         </tr>
     </c:forEach>
 </table>

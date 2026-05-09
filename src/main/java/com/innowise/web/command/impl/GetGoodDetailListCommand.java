@@ -3,6 +3,7 @@ package com.innowise.web.command.impl;
 import com.innowise.web.command.Command;
 import com.innowise.web.controller.router.Router;
 import com.innowise.web.dto.GoodDetailDto;
+import com.innowise.web.dto.UserDto;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
 import com.innowise.web.service.impl.GoodServiceImpl;
@@ -26,7 +27,9 @@ public class GetGoodDetailListCommand implements Command {
     GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     List<GoodDetailDto> goodDetailDtoList;
     try {
-      goodDetailDtoList = goodService.findAllWithUsername();
+      UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
+      Long userId = userDto.getId();
+      goodDetailDtoList = goodService.getGoodDtoListWithUsername(userId);
       request.setAttribute(GOOD_DETAIL_DTO_LIST_PARAMETER, goodDetailDtoList);
       logger.debug("Successfully retrieved {} goods for global list", goodDetailDtoList.size());
     } catch (ServiceException e) {

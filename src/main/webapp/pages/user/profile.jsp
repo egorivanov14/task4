@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>profile</title>
 </head>
 <body>
 <h2>username: ${user.username}</h2>
@@ -17,6 +17,6 @@
     <br/>
 </form>
 ${error_msg}
-<a href="${pageContext.request.contextPath}/pages/users/main.jsp">На главную</a>
+<a href="${pageContext.request.contextPath}/pages/user/main.jsp">На главную</a>
 </body>
 </html>

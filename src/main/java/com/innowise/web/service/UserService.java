@@ -20,11 +20,11 @@ public interface UserService {
 
   List<User> getUsers() throws ServiceException;
 
-  List<UserDto> getUserDtoList() throws ServiceException;
+  List<UserDto> getUserDtoList(Long adminId) throws ServiceException;
 
   boolean deleteUserByUsername(String username) throws ServiceException;
 
-  boolean deleteUserById(Long id) throws ServiceException;
+  boolean deleteUserById(Long userId, UserDto currentUser) throws ServiceException;
 
   boolean updateUsername(Long id, String newUsername) throws ServiceException;
 }

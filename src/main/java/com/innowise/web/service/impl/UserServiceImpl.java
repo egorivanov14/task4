@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.innowise.web.entity.Role.defineRole;
@@ -138,11 +139,23 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserDto> getUserDtoList() throws ServiceException {
+  public List<UserDto> getUserDtoList(Long adminId) throws ServiceException {
     logger.debug("Fetching all user DTOs");
-    List<User> users = getUsers();
-    UserConverter userConverter = new UserConverter();
-    return users.stream().map(userConverter::toDto).toList();
+    UserDaoImpl userDao = UserDaoImpl.getInstance();
+    try {
+      User user = userDao.findById(adminId).orElseThrow(() -> new ServiceException("User not found"));
+      int roleId = user.getRoleId();
+      Role role = Role.defineRole(roleId);
+      if (role.equals(Role.ROLE_ADMIN)) {
+        List<User> users = getUsers();
+        UserConverter userConverter = new UserConverter();
+        return users.stream().map(userConverter::toDto).toList();
+      } else {
+        throw new ServiceException("You dont have permission to do permit action");
+      }
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
   }
 
   @Override
@@ -157,11 +170,19 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean deleteUserById(Long id) throws ServiceException {
-    logger.debug("Deletion attempt for user ID: {}", id);
+  public boolean deleteUserById(Long userId, UserDto currentUser) throws ServiceException {
+    logger.debug("Deletion attempt for user ID: {}", userId);
     UserDaoImpl userDao = UserDaoImpl.getInstance();
     try {
-      return userDao.deleteById(id);
+      Role role = currentUser.getRole();
+      boolean isAdmin = role.equals(Role.ROLE_ADMIN);
+      Long currentUserId = currentUser.getId();
+      boolean isCurrentUser = Objects.equals(currentUserId, userId);
+      if (isAdmin || isCurrentUser) {
+        return userDao.deleteById(userId);
+      } else {
+        throw new ServiceException("You dont have permission to perform this operation");
+      }
     } catch (DaoException e) {
       throw new ServiceException(e);
     }

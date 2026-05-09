@@ -20,26 +20,26 @@ public class AddGoodCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing AddGoodCommand");
+    String name = request.getParameter(NAME_PARAMETER);
+    String priceStr = request.getParameter(PRICE_PARAMETER);
+    Long price = Long.parseLong(priceStr);
+    String quantityStr = request.getParameter(QUANTITY_PARAMETER);
+    Long quantity = Long.parseLong(quantityStr);
+    String manufacturer = request.getParameter(MANUFACTURER_PARAMETER);
+    String description = request.getParameter(DESCRIPTION_PARAMETER);
     HttpSession session = request.getSession();
-    session.setAttribute(CURRENT_PAGE_PARAMETER, ADD_GOOD_PAGE);
+    UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
+    Long userId = userDto.getId();
+    Good good = new Good(null, name, price, quantity, manufacturer, description, userId);
+    GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     try {
-      String name = request.getParameter(NAME_PARAMETER);
-      String priceStr = request.getParameter(PRICE_PARAMETER);
-      Long price = Long.parseLong(priceStr);
-      String quantityStr = request.getParameter(QUANTITY_PARAMETER);
-      Long quantity = Long.parseLong(quantityStr);
-      String manufacturer = request.getParameter(MANUFACTURER_PARAMETER);
-      String description = request.getParameter(DESCRIPTION_PARAMETER);
-      UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
-      Long userId = userDto.getId();
-      Good good = new Good(null, name, price, quantity, manufacturer, description, userId);
-      GoodServiceImpl goodService = GoodServiceImpl.getInstance();
       if (goodService.add(good)) {
         logger.info("Good '{}' successfully added by user ID: {}", name, userId);
-        request.setAttribute(MESSAGE_PARAMETER, "good added");
+        session.setAttribute(CURRENT_PAGE_PARAMETER, ADD_GOOD_PAGE);
+        request.setAttribute(INFO_MESSAGE_PARAMETER, "good added");
       } else {
-        logger.warn("Failed to add good '{}' for user ID: {}", name, userId);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good");
+        logger.warn("Failed to addItem good '{}' for user ID: {}", name, userId);
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to addItem good");
       }
     } catch (ServiceException e) {
       logger.error("Service error during good addition", e);

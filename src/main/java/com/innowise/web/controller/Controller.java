@@ -15,6 +15,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+import static com.innowise.web.config.PublicConstants.COMMAND_PARAMETER;
+
 @WebServlet(name = "controller", urlPatterns = "/controller")
 public class Controller extends HttpServlet {
   private static final Logger logger = LogManager.getLogger(Controller.class);
@@ -33,7 +35,7 @@ public class Controller extends HttpServlet {
   private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     response.setContentType("text/html");
 
-    String commandStr = request.getParameter("command");
+    String commandStr = request.getParameter(COMMAND_PARAMETER);
     Command command = CommandType.defineCommand(commandStr);
 
     try {

@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>goods-detail</title>
 </head>
 <body>
 <h1>Список всех товаров</h1>
@@ -37,6 +37,7 @@
     </c:forEach>
 </table>
 ${error_msg}
-<a href="${pageContext.request.contextPath}/pages/users/main.jsp">На главную</a>
+<hr/>
+<a href="${pageContext.request.contextPath}/pages/user/main.jsp">На главную</a>
 </body>
 </html>

@@ -1,10 +1,14 @@
 package com.innowise.web.service.impl;
 
 import com.innowise.web.dao.impl.GoodDaoImpl;
+import com.innowise.web.dao.impl.UserDaoImpl;
 import com.innowise.web.dto.GoodDetailDto;
 import com.innowise.web.dto.GoodDto;
+import com.innowise.web.dto.UserDto;
 import com.innowise.web.dto.converter.GoodConverter;
 import com.innowise.web.entity.Good;
+import com.innowise.web.entity.Role;
+import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
 import com.innowise.web.service.GoodService;
@@ -12,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class GoodServiceImpl implements GoodService {
@@ -29,11 +34,19 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<GoodDetailDto> findAllWithUsername() throws ServiceException {
+  public List<GoodDetailDto> getGoodDtoListWithUsername(Long adminId) throws ServiceException {
     logger.debug("Fetching all goods with usernames");
     try {
-      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
-      return goodDao.findAllWithUsername();
+      UserDaoImpl userDao = UserDaoImpl.getInstance();
+      User user = userDao.findById(adminId).orElseThrow(() -> new ServiceException("User not found"));
+      int roleId = user.getRoleId();
+      Role role = Role.defineRole(roleId);
+      if (role.equals(Role.ROLE_ADMIN)) {
+        GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+        return goodDao.findAllWithUsername();
+      } else {
+        throw new ServiceException("You dont have permission to use this service");
+      }
     } catch (DaoException e) {
       logger.error(e);
       throw new ServiceException(e);
@@ -52,21 +65,31 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public boolean deleteById(Long id) throws ServiceException {
-    logger.debug("Deleting good by ID: {}", id);
+  public boolean deleteById(Long goodId, UserDto currentUser) throws ServiceException {
+    logger.debug("Deleting good by ID: {}", goodId);
+    boolean result = false;
     try {
       GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
-      return goodDao.deleteById(id);
+      Good good = goodDao.findById(goodId).orElseThrow(() -> new ServiceException("Good is not exist"));
+      Long addedBy = good.getAddedBy();
+      Long userId = currentUser.getId();
+      boolean isOwner = Objects.equals(addedBy, userId);
+      Role role = currentUser.getRole();
+      boolean isAdmin = role.equals(Role.ROLE_ADMIN);
+      if (isOwner || isAdmin) {
+        result = goodDao.deleteById(goodId);
+      }
     } catch (DaoException e) {
       throw new ServiceException(e);
     }
+    return result;
   }
 
   @Override
-  public List<GoodDto> findAllGoodDto() throws ServiceException {//todo logs
+  public List<GoodDto> getAvailableGoodDtoList() throws ServiceException {//todo logs
     GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
     try {
-      List<Good> goodList = goodDao.findAll();
+      List<Good> goodList = goodDao.findAllAvailable();
       GoodConverter goodConverter = new GoodConverter();
       return goodList.stream().map(goodConverter::toDto).toList();
     } catch (DaoException e) {

@@ -30,7 +30,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   private static final String UPDATE_USER_NAME_SQL = "UPDATE users SET user_name = ? WHERE id = ?";
   private static final String GET_USER_BY_ID_SQL = "SELECT id, user_name, password, role_id FROM users WHERE id = ?";
   private static final String DELETE_USER_BY_ID_SQL = "DELETE FROM users WHERE id = ?";
-  private static final String EXISTS_BY_ID_SQL = "SELECT EXISTS (SELECT 1 FROM users WHERE user_name = ?)";
+  private static final String EXISTS_BY_ID_SQL = "SELECT EXISTS (SELECT 1 FROM users WHERE id = ?)";
   private static final String EXISTS_BY_USERNAME_SQL = "SELECT EXISTS (SELECT 1 FROM users WHERE user_name = ?)";
 
   private UserDaoImpl() {
@@ -84,7 +84,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
       int resultSet = statement.executeUpdate();
       return resultSet > 0;
     } catch (SQLException e) {
-      logger.error("Failed to delete user with ID: {}", id, e);
+      logger.error("Failed to deleteById user with ID: {}", id, e);
       throw new DaoException(e);
     } finally {
       connectionPool.releaseConnection(connection);
@@ -141,6 +141,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(EXISTS_BY_ID_SQL)) {
+      statement.setLong(1, id);
       ResultSet resultSet = statement.executeQuery();
       boolean exists = false;
       if (resultSet.next()) {
@@ -149,6 +150,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
       return exists;
     } catch (SQLException e) {
       throw new DaoException(e);
+    }finally {
+      connectionPool.releaseConnection(connection);
     }
   }
 
@@ -225,7 +228,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
       int result = statement.executeUpdate();
       return result > 0;
     } catch (SQLException e) {
-      logger.error("Failed to delete user by username: '{}'", username, e);
+      logger.error("Failed to deleteById user by username: '{}'", username, e);
       throw new DaoException(e);
     } finally {
       connectionPool.releaseConnection(connection);

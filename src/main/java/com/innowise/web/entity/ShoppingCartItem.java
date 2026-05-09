@@ -4,15 +4,13 @@ public class ShoppingCartItem {
   private Long userId;
   private Long goodId;
   private Long quantity;
-  private String description;
 
   public ShoppingCartItem() {}
 
-  public ShoppingCartItem(Long userId, Long goodId, Long quantity, String description) {
+  public ShoppingCartItem(Long userId, Long goodId, Long quantity) {
     this.userId = userId;
     this.goodId = goodId;
     this.quantity = quantity;
-    this.description = description;
   }
 
   public Long getUserId() {
@@ -27,10 +25,6 @@ public class ShoppingCartItem {
     return quantity;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
   public void setUserId(Long userId) {
     this.userId = userId;
   }
@@ -41,9 +35,5 @@ public class ShoppingCartItem {
 
   public void setQuantity(Long quantity) {
     this.quantity = quantity;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
   }
 }

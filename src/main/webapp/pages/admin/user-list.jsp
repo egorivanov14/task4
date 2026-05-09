@@ -28,6 +28,7 @@
     </c:forEach>
 </table>
 ${error_msg}
-<a href="${pageContext.request.contextPath}/pages/users/main.jsp">На главную</a>
+<hr/>
+<a href="${pageContext.request.contextPath}/pages/user/main.jsp">На главную</a>
 </body>
 </html>

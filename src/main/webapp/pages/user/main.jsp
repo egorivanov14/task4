@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>main page</title>
+    <title>main</title>
 </head>
 <body>
 <c:if test="${user.admin}">
@@ -18,6 +18,8 @@
     <li><a href="${pageContext.request.contextPath}/pages/good/add-good.jsp">Создать товар</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_good_dto_list_by_user">Посмотреть мои
         товары</a></li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=get_available_good_dto_list">Маркетплейс</a></li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=get_shopping_cart_by_user">Корзина</a></li>
 </ul>
 <form action="${pageContext.request.contextPath}/controller" method="post">
     <input type="hidden" name="command" value="logout">

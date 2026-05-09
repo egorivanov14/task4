@@ -21,19 +21,19 @@ public class DeleteCurrentUserCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing DeleteCurrentUserCommand");
     HttpSession session = request.getSession();
-    UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
+    UserDto currentUser = (UserDto) session.getAttribute(USER_PARAMETER);
     UserService userService = UserServiceImpl.getInstance();
     Router router = new Router();
-    Long userId = userDto.getId();
+    Long userId = currentUser.getId();
     try {
-      if (userService.deleteUserById(userId)) {
+      if (userService.deleteUserById(userId, currentUser)) {
         logger.info("User ID: {} successfully deleted (self-service)", userId);
         session.invalidate();
         router.setPage(request.getContextPath() + LOGIN_PAGE);
         router.setRedirect();
       } else {
         logger.warn("User ID: {} deletion failed at database layer", userId);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to delete user, try again");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to deleteById user, try again");
         router.setPage(PROFILE_PAGE);
         router.setForward();
       }

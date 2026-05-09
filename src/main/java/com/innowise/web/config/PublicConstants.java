@@ -17,8 +17,8 @@ public class PublicConstants {
   public static final String USER_LIST_PAGE = "/pages/admin/user-list.jsp";
   public static final String LOGIN_PAGE = "/pages/start/login.jsp";
   public static final String REGISTER_PAGE = "/pages/start/register.jsp";
-  public static final String MAIN_PAGE = "/pages/users/main.jsp";
-  public static final String PROFILE_PAGE = "/pages/users/profile.jsp";
+  public static final String MAIN_PAGE = "/pages/user/main.jsp";
+  public static final String PROFILE_PAGE = "/pages/user/profile.jsp";
   public static final String GOOD_DETAIL_LIST_PAGE = "/pages/admin/good-detail-list.jsp";
   public static final String MESSAGE_PARAMETER = "message";
   public static final String ADD_GOOD_PAGE = "/pages/good/add-good.jsp";
@@ -28,17 +28,21 @@ public class PublicConstants {
   public static final String ADDED_BY_PARAMETER = "added_by";
   public static final String ROLE_ID_PARAMETER = "role_id";
   public static final String GOOD_LIST_BY_USER_PAGE = "/pages/good/good-list-by-user.jsp";
+  public static final String SHOPPING_CART_PAGE = "/pages/good/shopping-cart.jsp";
+  public static final String GOOD_LIST_PAGE = "/pages/good/good-list.jsp";
   public static final String GOOD_ID_PARAMETER = "good_id";
   public static final String NAME_PARAMETER = "name";
   public static final String PRICE_PARAMETER = "price";
   public static final String QUANTITY_PARAMETER = "quantity";
-  public static final String  MANUFACTURER_PARAMETER = "manufacturer";
+  public static final String MANUFACTURER_PARAMETER = "manufacturer";
   public static final String DESCRIPTION_PARAMETER = "description";
+  public static final String SHOPPING_CART_ITEM_DTO_LIST_PARAMETER = "shopping_cart_item_dto_list";
   public static final String ERROR_PAGE = "/error.jsp";
   public static final int ROLE_USER_ID = 1;
   public static final int ROLE_ADMIN_ID = 2;
   public static final String ROLE_NAME_PARAMETER = "role_name";
   public static final String ID_PARAMETER = "id";
   public static final String COMMAND_PARAMETER = "command";
+  public static final String INFO_MESSAGE_PARAMETER = "info_msg";
   public static final List<String> ADMIN_COMMAND_LIST = List.of("delete_good_by_admin", "edit_role", "delete_user_by_admin");
 }
