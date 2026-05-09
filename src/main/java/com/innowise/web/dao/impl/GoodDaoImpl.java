@@ -32,6 +32,7 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   private static final String GET_ALL_AVAILABLE_GOOD_SQL = "SELECT id,  name, price, quantity, manufacturer, description, added_by FROM goods WHERE quantity > 0";
   private static final String RESERVE_GOOD_BY_ID_SQL = "UPDATE goods SET quantity = quantity - 1 WHERE id = ? AND quantity >= 1";
   private static final String ADD_QUANTITY_BY_ID_SQL = "UPDATE goods SET quantity = quantity + 1 WHERE id = ?";
+  private static final String CHANGE_QUANTITY_BY_ID_SQL = "UPDATE goods SET quantity = ? WHERE id = ?";
 
   private GoodDaoImpl() {
   }
@@ -211,17 +212,6 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public boolean reserveGood(Connection connection, Long userId, Long goodId) throws DaoException { // todo logs
-    try (PreparedStatement statement = connection.prepareStatement(RESERVE_GOOD_BY_ID_SQL)) {
-      statement.setLong(1, goodId);
-      int result = statement.executeUpdate();
-      return result > 0;
-    } catch (SQLException e) {
-      throw new DaoException(e);
-    }
-  }
-
-  @Override
   public List<Good> findAllAvailable() throws DaoException {
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
@@ -236,6 +226,17 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
+  public boolean decrementQuantity(Connection connection, Long userId, Long goodId) throws DaoException { // todo logs
+    try (PreparedStatement statement = connection.prepareStatement(RESERVE_GOOD_BY_ID_SQL)) {
+      statement.setLong(1, goodId);
+      int result = statement.executeUpdate();
+      return result > 0;
+    } catch (SQLException e) {
+      throw new DaoException(e);
+    }
+  }
+
+  @Override
   public boolean incrementQuantity(Connection connection, Long goodId) throws DaoException { // todo logs
     try (PreparedStatement statement = connection.prepareStatement(ADD_QUANTITY_BY_ID_SQL)) {
       statement.setLong(1, goodId);
@@ -245,6 +246,23 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
       throw new DaoException(e);
     }
   }
+
+  @Override
+  public boolean changeQuantity(Long goodId, Long quantity) throws DaoException { // todo logs
+    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    Connection connection = connectionPool.getConnection();
+    try (PreparedStatement statement = connection.prepareStatement(CHANGE_QUANTITY_BY_ID_SQL)) {
+      statement.setLong(1, quantity);
+      statement.setLong(2, goodId);
+      int result = statement.executeUpdate();
+      return result > 0;
+    } catch (SQLException e) {
+      throw new DaoException(e);
+    }finally {
+      connectionPool.releaseConnection(connection);
+    }
+  }
+
 
   private Good createGoodFromResultSet(ResultSet resultSet) throws SQLException {
     Long id = resultSet.getLong(ID_PARAMETER);

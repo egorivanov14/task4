@@ -1,7 +1,6 @@
 package com.innowise.web.controller.filter;
 
 import com.innowise.web.dto.UserDto;
-import com.innowise.web.entity.Role;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +24,7 @@ public class AdminAccessFilter implements Filter {
     HttpServletResponse httpServletResponse = (HttpServletResponse) response;
     HttpSession httpSession = httpServletRequest.getSession(false);
     UserDto user = (UserDto) httpSession.getAttribute(USER_PARAMETER);
-    Role role = user.getRole();
-    if (role.equals(Role.ROLE_ADMIN)) {
+    if (user.isAdmin()) {
       logger.debug("Admin access granted for user: {}", user.getUsername());
       chain.doFilter(request, response);
     } else {

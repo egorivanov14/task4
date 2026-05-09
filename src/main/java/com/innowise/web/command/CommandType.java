@@ -18,7 +18,9 @@ public enum CommandType {
   DELETE_GOOD(new DeleteGoodCommand()),
   DELETE_GOOD_BY_ADMIN(new DeleteGoodByAdminCommand()),
   GET_AVAILABLE_GOOD_DTO_LIST(new GetAvailableGoodDtoListCommand()),
-  ADD_SHOPPING_CART_ITEM(new AddShoppingCartItemCommand()),
+  ADD_SHOPPING_CART_ITEM_FROM_MARKETPLACE(new AddShoppingCartItemFromMarketplaceCommand()),
+  ADD_SHOPPING_CART_ITEM_FROM_CART(new AddShoppingCartItemFromCartCommand()),
+  CHANGE_GOOD_QUANTITY_BY_OWNER(new ChangeGoodQuantityByOwnerCommand()),
   GET_SHOPPING_CART_BY_USER(new GetShoppingCartByUserCommand()),
   REMOVE_ITEM_FROM_SHOPPING_CART(new RemoveItemFromShoppingCartCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());

@@ -48,7 +48,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return false;
       }
       connection.setAutoCommit(false);
-      boolean isReserved = goodDao.reserveGood(connection, userId, goodId);
+      boolean isReserved = goodDao.decrementQuantity(connection, userId, goodId);
       boolean result = false;
       if (isReserved) {
         logger.debug("Stock reserved for good ID: {}", goodId);

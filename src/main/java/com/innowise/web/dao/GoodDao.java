@@ -15,9 +15,11 @@ public interface GoodDao {
 
   Optional<Good> findByAddedBy(Long addedBy) throws DaoException;
 
-  boolean reserveGood(Connection connection, Long userId, Long goodId) throws DaoException;
+  boolean decrementQuantity(Connection connection, Long userId, Long goodId) throws DaoException;
 
   boolean incrementQuantity(Connection connection, Long goodId) throws DaoException;
+
+  boolean changeQuantity(Long goodId, Long quantity) throws DaoException;
 
   List<Good> findAllAvailable() throws DaoException;
 }

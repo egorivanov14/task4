@@ -14,7 +14,7 @@ import java.io.IOException;
 import static com.innowise.web.config.PublicConstants.LOGIN_PAGE;
 import static com.innowise.web.config.PublicConstants.USER_PARAMETER;
 
-@WebFilter(urlPatterns = {"/pages/admin/*", "/pages/users/*"})
+@WebFilter(urlPatterns = {"/pages/admin/*", "/pages/user/*, /pages/good/*, /controller"})
 public class AuthentificationFilter implements Filter {
   private static final Logger logger = LogManager.getLogger(AuthentificationFilter.class);
 

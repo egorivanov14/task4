@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 
 import static com.innowise.web.config.PublicConstants.*;
 
-public class AddShoppingCartItemCommand implements Command { // todo logs
+public class AddShoppingCartItemFromMarketplaceCommand implements Command { // todo logs
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     HttpSession session = request.getSession();

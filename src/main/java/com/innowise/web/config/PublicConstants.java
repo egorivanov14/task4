@@ -42,6 +42,7 @@ public class PublicConstants {
   public static final int ROLE_ADMIN_ID = 2;
   public static final String ROLE_NAME_PARAMETER = "role_name";
   public static final String ID_PARAMETER = "id";
+  public static final String NEW_QUANTITY_PARAMETER = "new_quantity";
   public static final String COMMAND_PARAMETER = "command";
   public static final String INFO_MESSAGE_PARAMETER = "info_msg";
   public static final List<String> ADMIN_COMMAND_LIST = List.of("delete_good_by_admin", "edit_role", "delete_user_by_admin");

@@ -118,4 +118,20 @@ public class GoodServiceImpl implements GoodService {
       throw new ServiceException(e);
     }
   }
+
+  @Override
+  public boolean changeQuantity(Long userId, Long goodId, Long newQuantity) throws ServiceException {
+    GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
+    try {
+      Good good = goodDao.findById(goodId).orElseThrow(() -> new ServiceException("Good not exists"));
+      Long addedBy = good.getAddedBy();
+      boolean result = false;
+      if (addedBy.equals(userId) && newQuantity >= 0) {
+        result = goodDao.changeQuantity(goodId, newQuantity);
+      }
+      return result;
+    } catch (DaoException e) {
+      throw new ServiceException(e);
+    }
+  }
 }
