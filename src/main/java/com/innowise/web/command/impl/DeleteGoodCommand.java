@@ -17,7 +17,7 @@ public class DeleteGoodCommand implements Command {
   private static final Logger logger = LogManager.getLogger(DeleteGoodCommand.class);
 
   @Override
-  public Router execute(HttpServletRequest request) throws CommandException {//todo logs
+  public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing DeleteGoodByIdCommand");
     String idStr = request.getParameter(GOOD_ID_PARAMETER);
     Long goodId = Long.parseLong(idStr);

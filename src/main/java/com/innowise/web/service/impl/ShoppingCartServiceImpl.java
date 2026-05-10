@@ -101,6 +101,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
   @Override
   public boolean removeItem(Long userId, Long goodId) throws ServiceException {
+    logger.debug("Removing good ID: {} from cart of user ID: {}", goodId, userId);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try {
@@ -111,8 +112,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       Long quantity = shoppingCartItem.getQuantity();
       boolean isItemRemoved;
       if (quantity > 1) {
+        logger.debug("Decrementing quantity for good ID: {} (current: {})", goodId, quantity);
         isItemRemoved = shoppingCartDao.decrementQuantity(connection, userId, goodId);
       } else {
+        logger.debug("Removing item completely for good ID: {} (quantity was 1)", goodId);
         isItemRemoved = shoppingCartDao.deleteById(userId, goodId);
       }
       boolean result = false;
@@ -122,10 +125,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (isAddedToGoodWarehouse) {
           result = true;
           connection.commit();
+          logger.info("Successfully removed good ID: {} from cart of user ID: {}", goodId, userId);
         } else {
+          logger.warn("Failed to return good ID: {} to warehouse, rolling back", goodId);
           connection.rollback();
         }
       } else {
+        logger.warn("Failed to remove good ID: {} from cart, rolling back", goodId);
         connection.rollback();
       }
       return result;
@@ -133,7 +139,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       try {
         connection.rollback();
       } catch (SQLException ignore) {
+        logger.warn("Secondary rollback failed for user ID: {}, good ID: {}", userId, goodId, ignore);
       }
+      logger.error("Transaction failed while removing good ID: {} from cart of user ID: {}", goodId, userId, e);
       throw new ServiceException(e);
     } finally {
       try {
@@ -141,6 +149,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       } catch (SQLException ignore) {
       }
       connectionPool.releaseConnection(connection);
+      logger.debug("Connection released for user ID: {}, good ID: {}", userId, goodId);
     }
   }
 }

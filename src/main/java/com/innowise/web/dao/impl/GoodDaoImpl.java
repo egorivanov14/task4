@@ -104,13 +104,17 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public List<Good> findAll() throws DaoException {//todo logs
+  public List<Good> findAll() throws DaoException {
+    logger.debug("Fetching all goods");
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(GET_ALL_GOOD_SQL);
          ResultSet resultSet = statement.executeQuery()) {
-      return getGoodListFromResultSet(resultSet);
+      List<Good> result = getGoodListFromResultSet(resultSet);
+      logger.debug("Successfully fetched {} goods", result.size());
+      return result;
     } catch (SQLException e) {
+      logger.error("Failed to fetch all goods", e);
       throw new DaoException(e);
     } finally {
       connectionPool.releaseConnection(connection);
@@ -118,7 +122,8 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public Optional<Good> findById(Long id) throws DaoException {//todo logs
+  public Optional<Good> findById(Long id) throws DaoException {
+    logger.debug("Fetching good by ID: {}", id);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(GET_GOOD_BY_ID_SQL)) {
@@ -128,10 +133,14 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
         if (resultSet.next()) {
           Good good = createGoodFromResultSet(resultSet);
           optionalGood = Optional.of(good);
+          logger.debug("Found good: {}", good.getName());
+        } else {
+          logger.debug("Good with ID: {} not found", id);
         }
         return optionalGood;
       }
     } catch (SQLException e) {
+      logger.error("Failed to fetch good by ID: {}", id, e);
       throw new DaoException(e);
     } finally {
       connectionPool.releaseConnection(connection);
@@ -139,7 +148,8 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public boolean existsById(Long id) throws DaoException { //todo logs
+  public boolean existsById(Long id) throws DaoException {
+    logger.debug("Checking existence for good ID: {}", id);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(EXISTS_BY_ID_SQL)) {
@@ -149,8 +159,10 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
       if (resultSet.next()) {
         exists = resultSet.getBoolean(1);
       }
+      logger.debug("Good ID: {} exists: {}", id, exists);
       return exists;
     } catch (SQLException e) {
+      logger.error("Database error while checking existence for good ID: {}", id, e);
       throw new DaoException(e);
     } finally {
       connectionPool.releaseConnection(connection);
@@ -207,18 +219,16 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public Optional<Good> findByAddedBy(Long addedBy) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public List<Good> findAllAvailable() throws DaoException {
+    logger.debug("Fetching all available goods");
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(GET_ALL_AVAILABLE_GOOD_SQL);
          ResultSet resultSet = statement.executeQuery()) {
+      logger.debug("Successfully fetched available goods");
       return getGoodListFromResultSet(resultSet);
     } catch (SQLException e) {
+      logger.error("Failed to fetch available goods", e);
       throw new DaoException(e);
     } finally {
       connectionPool.releaseConnection(connection);
@@ -226,43 +236,51 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public boolean decrementQuantity(Connection connection, Long userId, Long goodId) throws DaoException { // todo logs
+  public boolean decrementQuantity(Connection connection, Long userId, Long goodId) throws DaoException {
+    logger.debug("Decrementing quantity for good ID: {} by user ID: {}", goodId, userId);
     try (PreparedStatement statement = connection.prepareStatement(RESERVE_GOOD_BY_ID_SQL)) {
       statement.setLong(1, goodId);
       int result = statement.executeUpdate();
+      logger.debug("Decrement result for good ID: {}: {}", goodId, result > 0);
       return result > 0;
     } catch (SQLException e) {
+      logger.error("Failed to decrement quantity for good ID: {}", goodId, e);
       throw new DaoException(e);
     }
   }
 
   @Override
-  public boolean incrementQuantity(Connection connection, Long goodId) throws DaoException { // todo logs
+  public boolean incrementQuantity(Connection connection, Long goodId) throws DaoException {
+    logger.debug("Incrementing quantity for good ID: {}", goodId);
     try (PreparedStatement statement = connection.prepareStatement(ADD_QUANTITY_BY_ID_SQL)) {
       statement.setLong(1, goodId);
       int result = statement.executeUpdate();
+      logger.debug("Increment result for good ID: {}: {}", goodId, result > 0);
       return result > 0;
     } catch (SQLException e) {
+      logger.error("Failed to increment quantity for good ID: {}", goodId, e);
       throw new DaoException(e);
     }
   }
 
   @Override
-  public boolean changeQuantity(Long goodId, Long quantity) throws DaoException { // todo logs
+  public boolean changeQuantity(Long goodId, Long quantity) throws DaoException {
+    logger.debug("Changing quantity for good ID: {} to {}", goodId, quantity);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(CHANGE_QUANTITY_BY_ID_SQL)) {
       statement.setLong(1, quantity);
       statement.setLong(2, goodId);
       int result = statement.executeUpdate();
+      logger.debug("Change quantity result for good ID: {}: {}", goodId, result > 0);
       return result > 0;
     } catch (SQLException e) {
+      logger.error("Failed to change quantity for good ID: {}", goodId, e);
       throw new DaoException(e);
-    }finally {
+    } finally {
       connectionPool.releaseConnection(connection);
     }
   }
-
 
   private Good createGoodFromResultSet(ResultSet resultSet) throws SQLException {
     Long id = resultSet.getLong(ID_PARAMETER);

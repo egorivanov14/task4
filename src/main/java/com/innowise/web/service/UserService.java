@@ -22,8 +22,6 @@ public interface UserService {
 
   List<UserDto> getUserDtoList(Long adminId) throws ServiceException;
 
-  boolean deleteUserByUsername(String username) throws ServiceException;
-
   boolean deleteUserById(Long userId, UserDto currentUser) throws ServiceException;
 
   boolean updateUsername(Long id, String newUsername) throws ServiceException;

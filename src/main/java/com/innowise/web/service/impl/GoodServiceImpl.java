@@ -86,23 +86,17 @@ public class GoodServiceImpl implements GoodService {
   }
 
   @Override
-  public List<GoodDto> getAvailableGoodDtoList() throws ServiceException {//todo logs
+  public List<GoodDto> getAvailableGoodDtoList() throws ServiceException {
+    logger.debug("Fetching available goods list");
     GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
     try {
       List<Good> goodList = goodDao.findAllAvailable();
       GoodConverter goodConverter = new GoodConverter();
-      return goodList.stream().map(goodConverter::toDto).toList();
+      List<GoodDto> result = goodList.stream().map(goodConverter::toDto).toList();
+      logger.debug("Successfully fetched {} available goods", result.size());
+      return result;
     } catch (DaoException e) {
-      throw new ServiceException(e);
-    }
-  }
-
-  @Override
-  public Optional<Good> findById(Long id) throws ServiceException {
-    try {
-      GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
-      return goodDao.findById(id);
-    } catch (DaoException e) {
+      logger.error("Failed to fetch available goods list", e);
       throw new ServiceException(e);
     }
   }
@@ -121,6 +115,7 @@ public class GoodServiceImpl implements GoodService {
 
   @Override
   public boolean changeQuantity(Long userId, Long goodId, Long newQuantity) throws ServiceException {
+    logger.debug("Changing quantity for good ID: {} to {} by user ID: {}", goodId, newQuantity, userId);
     GoodDaoImpl goodDao = GoodDaoImpl.getInstance();
     try {
       Good good = goodDao.findById(goodId).orElseThrow(() -> new ServiceException("Good not exists"));
@@ -128,9 +123,13 @@ public class GoodServiceImpl implements GoodService {
       boolean result = false;
       if (addedBy.equals(userId) && newQuantity >= 0) {
         result = goodDao.changeQuantity(goodId, newQuantity);
+        logger.info("Successfully changed quantity for good ID: {} to {} by user ID: {}", goodId, newQuantity, userId);
+      } else {
+        logger.warn("Quantity change denied for good ID: {} by user ID: {} (owner: {}, newQuantity: {})", goodId, userId, addedBy, newQuantity);
       }
       return result;
     } catch (DaoException e) {
+      logger.error("Failed to change quantity for good ID: {} by user ID: {}", goodId, userId, e);
       throw new ServiceException(e);
     }
   }

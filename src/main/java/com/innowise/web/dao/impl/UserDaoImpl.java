@@ -137,7 +137,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   }
 
   @Override
-  public boolean existsById(Long id) throws DaoException { // todo logs
+  public boolean existsById(Long id) throws DaoException {
+    logger.debug("Checking existence for user ID: {}", id);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(EXISTS_BY_ID_SQL)) {
@@ -147,8 +148,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
       if (resultSet.next()) {
         exists = resultSet.getBoolean(1);
       }
+      logger.debug("User ID: {} exists: {}", id, exists);
       return exists;
     } catch (SQLException e) {
+      logger.error("Database error while checking existence for user ID: {}", id, e);
       throw new DaoException(e);
     }finally {
       connectionPool.releaseConnection(connection);
@@ -180,7 +183,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   }
 
   @Override
-  public boolean existsByUsername(String username) throws DaoException {//todo logs
+  public boolean existsByUsername(String username) throws DaoException {
     logger.debug("Checking existence of user: {}", username);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
@@ -191,6 +194,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         if (resultSet.next()) {
           exists = resultSet.getBoolean(1);
         }
+        logger.debug("User '{}' exists: {}", username, exists);
         return exists;
       }
     } catch (SQLException e) {

@@ -12,7 +12,7 @@ import static com.innowise.web.config.PublicConstants.CURRENT_PAGE_PARAMETER;
 import static com.innowise.web.config.PublicConstants.MAIN_PAGE;
 
 public class ReturnToPreviousPageCommand implements Command {
-  private static final Logger logger = LogManager.getLogger(Router.class);
+  private static final Logger logger = LogManager.getLogger(ReturnToPreviousPageCommand.class);
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {

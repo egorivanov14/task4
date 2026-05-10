@@ -18,8 +18,6 @@ public interface GoodService {
 
   List<GoodDto> getAvailableGoodDtoList() throws ServiceException;
 
-  Optional<Good> findById(Long id) throws ServiceException;
-
   List<GoodDto> getGoodDtoListByUserId(Long userId) throws ServiceException;
 
   boolean changeQuantity(Long userId, Long goodId, Long newQuantity) throws ServiceException;

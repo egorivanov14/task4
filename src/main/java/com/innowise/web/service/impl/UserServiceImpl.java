@@ -159,17 +159,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean deleteUserByUsername(String username) throws ServiceException {
-    logger.debug("Deletion attempt for user: {}", username);
-    UserDaoImpl userDao = UserDaoImpl.getInstance();
-    try {
-      return userDao.deleteUserByUsername(username);
-    } catch (DaoException e) {
-      throw new ServiceException(e);
-    }
-  }
-
-  @Override
   public boolean deleteUserById(Long userId, UserDto currentUser) throws ServiceException {
     logger.debug("Deletion attempt for user ID: {}", userId);
     UserDaoImpl userDao = UserDaoImpl.getInstance();
