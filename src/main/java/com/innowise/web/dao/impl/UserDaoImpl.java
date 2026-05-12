@@ -8,10 +8,7 @@ import com.innowise.web.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,34 +41,30 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
   }
 
   @Override
-  public boolean add(User user) throws DaoException {
+  public Long addUser(Connection connection, User user) throws DaoException {
     logger.debug("Attempting to register user: {}", user.getUserName());
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
-    Connection connection = connectionPool.getConnection();
-    try (PreparedStatement statement = connection.prepareStatement(ADD_USER_SQL)) {
+    try (PreparedStatement statement = connection.prepareStatement(ADD_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
       statement.setString(1, user.getUserName());
       statement.setString(2, user.getPassword());
       int roleId = user.getRoleId();
       statement.setInt(3, roleId);
       int resultSet = statement.executeUpdate();
-      logger.info("Successfully registered user: {}", user.getUserName());
-      return resultSet > 0;
+      ResultSet generatedKeys = statement.getGeneratedKeys();
+      if (resultSet > 0 && generatedKeys.next()) {
+        logger.debug("Successfully registered user: {}", user.getUserName());
+        return generatedKeys.getLong(1);
+      } else {
+        throw new DaoException("Failed to register user");
+      }
     } catch (SQLException e) {
       logger.error("Failed to register user '{}'", user.getUserName(), e);
       throw new DaoException(e);
-    } finally {
-      connectionPool.releaseConnection(connection);
     }
   }
 
   @Override
-  public boolean update(User user) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean delete(User user) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
+  public boolean add(User user) throws DaoException {
+    return false;
   }
 
   @Override
@@ -153,7 +146,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     } catch (SQLException e) {
       logger.error("Database error while checking existence for user ID: {}", id, e);
       throw new DaoException(e);
-    }finally {
+    } finally {
       connectionPool.releaseConnection(connection);
     }
   }

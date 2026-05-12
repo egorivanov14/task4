@@ -1,5 +1,7 @@
 package com.innowise.web.service.impl;
 
+import com.innowise.web.connection.ConnectionPool;
+import com.innowise.web.dao.impl.UserBalanceDaoImpl;
 import com.innowise.web.dao.impl.UserDaoImpl;
 import com.innowise.web.dto.UserDto;
 import com.innowise.web.dto.converter.UserConverter;
@@ -12,6 +14,8 @@ import com.innowise.web.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,31 +37,50 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean register(String username, String password) throws ServiceException {
+  public boolean register(String username, String password) throws ServiceException { // todo logs
     logger.debug("Registration attempt for user: {}", username);
     if (username == null || password == null) {
       logger.warn("Registration failed: null credentials provided");
       return false;
     }
-    UserDaoImpl userDao = UserDaoImpl.getInstance();
-    boolean isRegistered = false;
+    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    Connection connection = connectionPool.getConnection();
     try {
-      boolean isUserExists = userDao.existsByUsername(username);
-      if (!isUserExists) {
+      UserDaoImpl userDao = UserDaoImpl.getInstance();
+      if (userDao.deleteUserByUsername(username)) {
         logger.warn("Registration failed: user '{}' already exists", username);
-        String passwordHash = PasswordCoder.encode(password);
-        Role roleUser = Role.ROLE_USER;
-        int roleUserId = roleUser.getRoleId();
-        User user = new User(null, username, passwordHash, roleUserId);
-        userDao.add(user);
-        logger.info("User successfully registered: {}", username);
-        isRegistered = true;
+        return false;
       }
-    } catch (DaoException e) {
+      String passwordHash = PasswordCoder.encode(password);
+      Role roleUser = Role.ROLE_USER;
+      int roleUserId = roleUser.getRoleId();
+      User user = new User(null, username, passwordHash, roleUserId);
+      connection.setAutoCommit(false);
+      Long userId = userDao.addUser(connection, user);
+      UserBalanceDaoImpl userBalanceDao = UserBalanceDaoImpl.getInstance();
+      boolean isBalanceCreated = userBalanceDao.addEmpty(connection, userId);
+      boolean isRegistered = false;
+      if (isBalanceCreated) {
+        connection.commit();
+        isRegistered = true;
+      } else {
+        connection.rollback();
+      }
+      return isRegistered;
+    } catch (SQLException | DaoException e) {
+      try {
+        connection.rollback();
+      } catch (SQLException ignore) {
+      }
       logger.error("Service error during registration of user '{}'", username, e);
       throw new ServiceException(e);
+    } finally {
+      try {
+        connection.setAutoCommit(true);
+      } catch (SQLException ignore) {
+      }
+      connectionPool.releaseConnection(connection);
     }
-    return isRegistered;
   }
 
   @Override

@@ -8,10 +8,6 @@ import java.util.Optional;
 public abstract class AbstractDao<T> {
   public abstract boolean add(T t) throws DaoException;
 
-  public abstract boolean update(T t) throws DaoException;
-
-  public abstract boolean delete(T t) throws DaoException;
-
   public abstract boolean deleteById(Long id) throws DaoException;
 
   public abstract List<T> findAll() throws DaoException;

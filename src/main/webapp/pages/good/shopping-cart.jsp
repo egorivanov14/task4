@@ -6,10 +6,11 @@
 </head>
 <body>
 <h1>Ваша корзина</h1>
+<p>Баланс: ${balance}</p>
 <c:choose>
     <c:when test="${empty shopping_cart_item_dto_list}">
         <p>Корзина пуста</p>
-        <a href="${pageContext.request.contextPath}/pages/good/good-list.jsp">Добавить товары</a>
+        <a href="${pageContext.request.contextPath}/controller?command=get_available_good_dto_list">Маркетплейс</a>
     </c:when>
     <c:otherwise>
         <table>
@@ -23,7 +24,7 @@
                 <tr>
                     <td>${item.goodName}</td>
                     <td>${item.quantity}</td>
-                    <td>${item.fullPrice}</td>
+                    <td>${item.amount}</td>
                     <td>
                         <form action="${pageContext.request.contextPath}/controller" method="post">
                             <input type="hidden" name="command" value="add_shopping_cart_item_from_cart"/>
@@ -38,10 +39,19 @@
                             <input type="submit" value="-"/>
                         </form>
                     </td>
+                    <td>
+                        <form action="${pageContext.request.contextPath}/controller" method="post">
+                            <input type="hidden" name="command" value="order_item"/>
+                            <input type="hidden" name="good_id" value="${item.goodId}"/>
+                            <input type="hidden" name="amount" value="${item.amount}"/>
+                            <input type="submit" value="Приобрести товар"/>
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
         </table>
         ${error_msg}
+        ${message}
     </c:otherwise>
 </c:choose>
 <hr/>

@@ -23,6 +23,8 @@ public enum CommandType {
   CHANGE_GOOD_QUANTITY_BY_OWNER(new ChangeGoodQuantityByOwnerCommand()),
   GET_SHOPPING_CART_BY_USER(new GetShoppingCartByUserCommand()),
   REMOVE_ITEM_FROM_SHOPPING_CART(new RemoveItemFromShoppingCartCommand()),
+  UPP_BALANCE(new UppBalanceCommand()),
+  ORDER_ITEM(new OrderItemCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;

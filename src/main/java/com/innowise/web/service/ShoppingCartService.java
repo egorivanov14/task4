@@ -11,4 +11,6 @@ public interface ShoppingCartService {
   List<ShoppingCartItemDto> findAllDtoByUserId(Long userId) throws ServiceException;
 
   boolean removeItem(Long userId, Long goodId) throws ServiceException;
+
+  boolean order(Long userId, Long goodId, Long amount) throws ServiceException;
 }

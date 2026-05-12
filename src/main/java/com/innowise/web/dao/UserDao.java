@@ -3,6 +3,7 @@ package com.innowise.web.dao;
 import com.innowise.web.entity.User;
 import com.innowise.web.exception.DaoException;
 
+import java.sql.Connection;
 import java.util.Optional;
 
 public interface UserDao {
@@ -15,4 +16,6 @@ public interface UserDao {
   boolean deleteUserByUsername(String username) throws DaoException;
 
   boolean updateUsername(Long id, String newUsername) throws DaoException;
+
+  Long addUser(Connection connection, User user) throws DaoException;
 }

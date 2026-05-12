@@ -4,15 +4,15 @@ public class ShoppingCartItemDto {
   private Long goodId;
   private String goodName;
   private Long quantity;
-  private Long fullPrice;
+  private Long amount;
 
   public ShoppingCartItemDto() {}
 
-  public ShoppingCartItemDto(Long goodId, String goodName, Long quantity,  Long fullPrice) {
+  public ShoppingCartItemDto(Long goodId, String goodName, Long quantity,  Long amount) {
     this.goodId = goodId;
     this.goodName = goodName;
     this.quantity = quantity;
-    this.fullPrice = fullPrice;
+    this.amount = amount;
   }
 
   public Long getGoodId() {
@@ -27,8 +27,8 @@ public class ShoppingCartItemDto {
     return quantity;
   }
 
-  public Long getFullPrice() {
-    return fullPrice;
+  public Long getAmount() {
+    return amount;
   }
 
   public void setGoodId(Long goodId) {
@@ -43,7 +43,7 @@ public class ShoppingCartItemDto {
     this.quantity = quantity;
   }
 
-  public void setFullPrice(Long fullPrice) {
-    this.fullPrice = fullPrice;
+  public void setAmount(Long amount) {
+    this.amount = amount;
   }
 }

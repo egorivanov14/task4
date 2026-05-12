@@ -26,7 +26,7 @@ public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implement
   private static final String INSERT_ITEM_INTO_SHOPPING_CART_SQL = "INSERT INTO shopping_cart (user_id, good_id, quantity) VALUES (?, ?, ?)";
   private static final String UPDATE_SHOPPING_CART_ITEM_QUANTITY_BY_ID_SQL = "UPDATE shopping_cart SET quantity = quantity + 1 WHERE user_id = ? AND good_id = ?";
   private static final String GET_SHOPPING_CART_ITEM_BY_ID_SQL = "SELECT user_id, good_id, quantity FROM shopping_cart WHERE user_id = ? AND good_id = ?";
-  private static final String EXISTS_SQL = "SELECT EXISTS(SELECT 1 FROM shopping_cart WHERE user_id = ? AND good_id = ?)";
+  private static final String EXISTS_SQL = "SELECT EXISTS (SELECT 1 FROM shopping_cart WHERE user_id = ? AND good_id = ?)";
   private static final String GET_ALL_SHOPPING_CART_ITEMS_BY_USER_ID_WITH_GOOD_NAME_SQL = "SELECT c.good_id, g.name, g.price, c.quantity FROM shopping_cart c INNER JOIN goods g ON c.good_id = g.id WHERE c.user_id = ?";
   private static final String DELETE_SHOPPING_CART_ITEM_BY_ID_SQL = "DELETE FROM shopping_cart WHERE user_id = ? AND good_id = ?";
   private static final String DECREMENT_QUANTITY_SQL = "UPDATE shopping_cart SET quantity = quantity - 1 WHERE user_id = ? AND good_id = ?";
@@ -157,8 +157,8 @@ public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implement
         String goodName = resultSet.getString(NAME_PARAMETER);
         Long quantity = resultSet.getLong(QUANTITY_PARAMETER);
         Long pricePerOne = resultSet.getLong(PRICE_PARAMETER);
-        Long fullPrice = pricePerOne * quantity;
-        shoppingCartItems.add(new ShoppingCartItemDto(goodId, goodName, quantity, fullPrice));
+        Long amount = pricePerOne * quantity;
+        shoppingCartItems.add(new ShoppingCartItemDto(goodId, goodName, quantity, amount));
       }
       logger.debug("Successfully fetched {} cart items for user ID: {}", shoppingCartItems.size(), userId);
       return shoppingCartItems;
@@ -171,10 +171,8 @@ public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implement
   }
 
   @Override
-  public boolean deleteById(Long userId, Long goodId) throws DaoException {
+  public boolean deleteById(Connection connection, Long userId, Long goodId) throws DaoException {
     logger.debug("Deleting cart item for user ID: {}, good ID: {}", userId, goodId);
-    ConnectionPool connectionPool = ConnectionPool.getInstance();
-    Connection connection = connectionPool.getConnection();
     try (PreparedStatement statement = connection.prepareStatement(DELETE_SHOPPING_CART_ITEM_BY_ID_SQL)) {
       statement.setLong(1, userId);
       statement.setLong(2, goodId);
@@ -184,19 +182,7 @@ public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implement
     } catch (SQLException e) {
       logger.error("Failed to delete cart item for user ID: {}, good ID: {}", userId, goodId, e);
       throw new DaoException(e);
-    } finally {
-      connectionPool.releaseConnection(connection);
     }
-  }
-
-  @Override
-  public boolean update(ShoppingCartItem shoppingCartItem) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean delete(ShoppingCartItem shoppingCartItem) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override

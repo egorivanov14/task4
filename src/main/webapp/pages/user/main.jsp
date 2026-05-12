@@ -18,6 +18,7 @@
     <li><a href="${pageContext.request.contextPath}/pages/good/add-good.jsp">Создать товар</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_good_dto_list_by_user">Посмотреть мои
         товары</a></li>
+    <li><a href="${pageContext.request.contextPath}/pages/balance/upp-balance.jsp">Пополнить баланс</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_available_good_dto_list">Маркетплейс</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_shopping_cart_by_user">Корзина</a></li>
 </ul>

@@ -5,6 +5,7 @@ import com.innowise.web.controller.router.Router;
 import com.innowise.web.dto.UserDto;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
+import com.innowise.web.service.impl.UserBalanceServiceImpl;
 import com.innowise.web.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,10 @@ public class SetUserToSessionCommand implements Command {
       if (optionalUserDto.isPresent()) {
         UserDto userDto = optionalUserDto.get();
         session.setAttribute(USER_PARAMETER, userDto);
+        Long userId = userDto.getId();
+        UserBalanceServiceImpl userBalanceService = UserBalanceServiceImpl.getInstance();
+        Long balance = userBalanceService.getBalanceByUserId(userId);
+        session.setAttribute(BALANCE_PARAMETER, balance);
         logger.debug("User '{}' successfully bound to session", userDto.getUsername());
       } else {
         logger.warn("User '{}' not found during session binding", username);

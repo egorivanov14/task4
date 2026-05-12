@@ -3,8 +3,10 @@ package com.innowise.web.service.impl;
 import com.innowise.web.connection.ConnectionPool;
 import com.innowise.web.dao.impl.GoodDaoImpl;
 import com.innowise.web.dao.impl.ShoppingCartDaoImpl;
+import com.innowise.web.dao.impl.UserBalanceDaoImpl;
 import com.innowise.web.dao.impl.UserDaoImpl;
 import com.innowise.web.dto.ShoppingCartItemDto;
+import com.innowise.web.entity.Balance;
 import com.innowise.web.entity.ShoppingCartItem;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
@@ -85,7 +87,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       } catch (SQLException ignore) {
       }
       connectionPool.releaseConnection(connection);
-      logger.debug("Connection released for user ID: {}, good ID: {}", userId, goodId);
     }
   }
 
@@ -116,7 +117,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         isItemRemoved = shoppingCartDao.decrementQuantity(connection, userId, goodId);
       } else {
         logger.debug("Removing item completely for good ID: {} (quantity was 1)", goodId);
-        isItemRemoved = shoppingCartDao.deleteById(userId, goodId);
+        isItemRemoved = shoppingCartDao.deleteById(connection, userId, goodId);
       }
       boolean result = false;
       if (isItemRemoved) {
@@ -149,7 +150,39 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       } catch (SQLException ignore) {
       }
       connectionPool.releaseConnection(connection);
-      logger.debug("Connection released for user ID: {}, good ID: {}", userId, goodId);
+    }
+  }
+
+  @Override
+  public boolean order(Long userId, Long goodId, Long amount) throws ServiceException { // todo logs
+    ConnectionPool connectionPool = ConnectionPool.getInstance();
+    Connection connection = connectionPool.getConnection();
+    try {
+      connection.setAutoCommit(false);
+      ShoppingCartDaoImpl shoppingCartDao = ShoppingCartDaoImpl.getInstance();
+      boolean isDeleted = shoppingCartDao.deleteById(connection, userId, goodId);
+      UserBalanceDaoImpl userBalanceDao = UserBalanceDaoImpl.getInstance();
+      boolean isDeducted = userBalanceDao.deductBalance(connection, userId, amount);
+      boolean result = false;
+      if (isDeleted && isDeducted) {
+        result = true;
+        connection.commit();
+      } else {
+        connection.rollback();
+      }
+      return result;
+    } catch (SQLException | DaoException e) {
+      try {
+        connection.rollback();
+      } catch (SQLException ignore) {
+      }
+      throw new ServiceException(e);
+    } finally {
+      try {
+        connection.setAutoCommit(true);
+      } catch (SQLException ignore) {
+      }
+      connectionPool.releaseConnection(connection);
     }
   }
 }

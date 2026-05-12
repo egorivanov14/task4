@@ -22,5 +22,5 @@ public interface ShoppingCartDao {
 
   List<ShoppingCartItemDto> findAllDtoByUserId(Long userId) throws DaoException;
 
-  boolean deleteById(Long userId, Long goodId) throws DaoException;
+  boolean deleteById(Connection connection, Long userId, Long goodId) throws DaoException;
 }

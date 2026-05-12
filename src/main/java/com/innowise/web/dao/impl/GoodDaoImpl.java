@@ -77,16 +77,6 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
   }
 
   @Override
-  public boolean update(Good good) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean delete(Good good) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public boolean deleteById(Long id) throws DaoException {
     logger.debug("Deleting good by ID: {}", id);
     ConnectionPool connectionPool = ConnectionPool.getInstance();
