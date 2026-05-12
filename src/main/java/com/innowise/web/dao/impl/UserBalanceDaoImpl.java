@@ -1,9 +1,7 @@
 package com.innowise.web.dao.impl;
 
 import com.innowise.web.connection.ConnectionPool;
-import com.innowise.web.dao.AbstractDao;
 import com.innowise.web.dao.UserBalanceDao;
-import com.innowise.web.entity.Balance;
 import com.innowise.web.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
 
-public class UserBalanceDaoImpl extends AbstractDao<Balance> implements UserBalanceDao {
+public class UserBalanceDaoImpl implements UserBalanceDao {
   private static final Logger LOG = LogManager.getLogger(UserBalanceDaoImpl.class);
   private static UserBalanceDaoImpl instance;
   private static final String ADD_EMPTY_BALANCE_SQL = "INSERT INTO user_balance (user_id, balance) VALUES (?, 0)";
@@ -31,31 +27,6 @@ public class UserBalanceDaoImpl extends AbstractDao<Balance> implements UserBala
       instance = new UserBalanceDaoImpl();
     }
     return instance;
-  }
-
-  @Override
-  public boolean add(Balance balance) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean deleteById(Long id) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public List<Balance> findAll() throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public Optional<Balance> findById(Long id) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean existsById(Long id) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override

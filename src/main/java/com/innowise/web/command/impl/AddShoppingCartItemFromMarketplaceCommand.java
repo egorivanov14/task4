@@ -27,9 +27,9 @@ public class AddShoppingCartItemFromMarketplaceCommand implements Command {
     logger.debug("Adding good ID: {} to cart for user ID: {}", goodId, userId);
     try {
       ShoppingCartServiceImpl shoppingCartService = ShoppingCartServiceImpl.getInstance();
-      if (!shoppingCartService.addItem(userId, goodId)) {
+      if (!shoppingCartService.add(userId, goodId)) {
         logger.warn("Failed to add good ID: {} to shopping cart for user ID: {}", goodId, userId);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to addItem good to shopping cart");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good to shopping cart");
       }
       GetAvailableGoodDtoListCommand getGoodDtoListCommand = new GetAvailableGoodDtoListCommand();
       logger.debug("Forwarding to GetAvailableGoodDtoListCommand");

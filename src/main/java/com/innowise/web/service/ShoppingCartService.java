@@ -6,7 +6,7 @@ import com.innowise.web.exception.ServiceException;
 import java.util.List;
 
 public interface ShoppingCartService {
-  boolean addItem(Long userId, Long goodId) throws ServiceException;
+  boolean add(Long userId, Long goodId) throws ServiceException;
 
   List<ShoppingCartItemDto> findAllDtoByUserId(Long userId) throws ServiceException;
 

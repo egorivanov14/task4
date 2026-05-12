@@ -46,7 +46,7 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
 
   @Override
   public boolean add(Good good) throws DaoException {
-    logger.debug("Attempting to addItem good: {}", good.getName());
+    logger.debug("Attempting to add good: {}", good.getName());
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     Long quantity = good.getQuantity();
@@ -67,7 +67,7 @@ public class GoodDaoImpl extends AbstractDao<Good> implements GoodDao {
         logger.debug("Successfully added good: {}", good.getName());
         return resultSet > 0;
       } catch (SQLException e) {
-        logger.error("Failed to addItem good '{}'", good.getName(), e);
+        logger.error("Failed to add good '{}'", good.getName(), e);
         throw new DaoException(e);
       } finally {
         connectionPool.releaseConnection(connection);

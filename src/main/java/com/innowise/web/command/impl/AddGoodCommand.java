@@ -38,8 +38,8 @@ public class AddGoodCommand implements Command {
         session.setAttribute(CURRENT_PAGE_PARAMETER, ADD_GOOD_PAGE);
         request.setAttribute(INFO_MESSAGE_PARAMETER, "good added");
       } else {
-        logger.warn("Failed to addItem good '{}' for user ID: {}", name, userId);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to addItem good");
+        logger.warn("Failed to add good '{}' for user ID: {}", name, userId);
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good");
       }
     } catch (ServiceException e) {
       logger.error("Service error during good addition", e);

@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static com.innowise.web.config.PublicConstants.*;
 
-public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implements ShoppingCartDao {
+public class ShoppingCartDaoImpl implements ShoppingCartDao {
   private static final Logger logger = LogManager.getLogger(ShoppingCartDaoImpl.class);
   private static ShoppingCartDaoImpl instance;
   private static final String INSERT_ITEM_INTO_SHOPPING_CART_SQL = "INSERT INTO shopping_cart (user_id, good_id, quantity) VALUES (?, ?, ?)";
@@ -40,11 +40,6 @@ public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implement
       instance = new ShoppingCartDaoImpl();
     }
     return instance;
-  }
-
-  @Override
-  public boolean add(ShoppingCartItem shoppingCartItem) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
@@ -183,25 +178,5 @@ public class ShoppingCartDaoImpl extends AbstractDao<ShoppingCartItem> implement
       logger.error("Failed to delete cart item for user ID: {}, good ID: {}", userId, goodId, e);
       throw new DaoException(e);
     }
-  }
-
-  @Override
-  public boolean deleteById(Long id) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public List<ShoppingCartItem> findAll() throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public Optional<ShoppingCartItem> findById(Long id) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean existsById(Long id) throws DaoException {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

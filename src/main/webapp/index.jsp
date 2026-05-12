@@ -2,28 +2,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>start</title>
-    <link rel="stylesheet" href="css/index.css">
+    <title>welcome</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-<h1>
+<p class="welcome-message">
     Добро пожаловать!
-</h1>
-<p>
-    Рады вас видеть
 </p>
-<h4 class="message">
-    Привет, я класс
-</h4>
-<h3>
+<p class="message">
     Есть аккаунт?
-</h3>
+</p>
 <a href="pages/start/login.jsp">
     <button type="button">Войти</button>
 </a>
-<h3>
+<p class="message">
     Впервые на сайте?
-</h3>
+</p>
 <a href="pages/start/register.jsp">
     <button type="button">Зарегистрироваться</button>
 </a>

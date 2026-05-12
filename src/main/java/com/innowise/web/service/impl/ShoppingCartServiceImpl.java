@@ -6,7 +6,6 @@ import com.innowise.web.dao.impl.ShoppingCartDaoImpl;
 import com.innowise.web.dao.impl.UserBalanceDaoImpl;
 import com.innowise.web.dao.impl.UserDaoImpl;
 import com.innowise.web.dto.ShoppingCartItemDto;
-import com.innowise.web.entity.Balance;
 import com.innowise.web.entity.ShoppingCartItem;
 import com.innowise.web.exception.DaoException;
 import com.innowise.web.exception.ServiceException;
@@ -33,7 +32,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
   }
 
   @Override
-  public boolean addItem(Long userId, Long goodId) throws ServiceException {
+  public boolean add(Long userId, Long goodId) throws ServiceException {
     logger.debug("Adding good ID: {} to shopping_cart of user ID: {}", goodId, userId);
 
     ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -75,7 +74,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
       }
       return result;
     } catch (SQLException | DaoException e) {
-      logger.error("Failed to addItem good ID: {} to shopping_cart of user ID: {}", goodId, userId, e);
+      logger.error("Failed to add good ID: {} to shopping_cart of user ID: {}", goodId, userId, e);
       try {
         connection.rollback();
       } catch (SQLException ignore) {
