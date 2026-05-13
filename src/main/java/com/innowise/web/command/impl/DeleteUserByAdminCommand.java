@@ -21,8 +21,19 @@ public class DeleteUserByAdminCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing DeleteUserByAdminCommand");
     String idString = request.getParameter(USER_ID_PARAMETER);
-    Long userId = Long.parseLong(idString);
-    Router router = new Router();
+    if (idString == null || idString.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "user id is required");
+      return Router.forwardTo(USER_LIST_PAGE);
+    }
+
+    Long userId;
+    try {
+      userId = Long.parseLong(idString);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "user id must be a number");
+      return Router.forwardTo(USER_LIST_PAGE);
+    }
+    Router router;
     try {
       logger.debug("Admin attempting to deleteById user ID: {}", userId);
       UserService userService = UserServiceImpl.getInstance();
@@ -36,8 +47,7 @@ public class DeleteUserByAdminCommand implements Command {
       } else {
         logger.warn("Admin failed to deleteById user ID: {}", userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to deleteById user, try again");
-        router.setForward();
-        router.setPage(USER_LIST_PAGE);
+        router = Router.forwardTo(USER_LIST_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during admin deletion of user ID: {}", userId, e);

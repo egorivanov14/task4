@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import static com.innowise.web.config.PublicConstants.*;
 
-@WebFilter(urlPatterns = "/controller")
 public class AdminCommandAccessFilter implements Filter {
   private static final Logger logger = LogManager.getLogger(AdminCommandAccessFilter.class);
 

@@ -20,26 +20,29 @@ public class EditRoleCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing EditRoleCommand");
+    String toUserName = request.getParameter(TO_USERNAME_PARAMETER);
+    String role = request.getParameter(ROLE_PARAMETER);
+
+    if (toUserName == null || toUserName.isBlank() ||
+            role == null || role.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "username and role are required");
+      return Router.forwardTo(EDIT_ROLE_PAGE);
+    }
     UserService userService = getInstance();
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, EDIT_ROLE_PAGE);
     UserDto currentUser = (UserDto) session.getAttribute(USER_PARAMETER);
-    String toUserName = request.getParameter(TO_USERNAME_PARAMETER);
-    String role = request.getParameter(ROLE_PARAMETER);
     logger.info("Role change attempt by admin '{}' -> user '{}', target role: {}",
             currentUser.getUsername(), toUserName, role);
     try {
       if (!userService.setRole(currentUser, toUserName, role)) {
         logger.warn("Role assignment failed or denied for user: {}", toUserName);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "You dont have permission to perform this action.");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "Failed to change role");
       }
     } catch (ServiceException e) {
       logger.error("Service error during role edit for user: {}", toUserName, e);
       throw new CommandException(e);
     }
-    Router router = new Router();
-    router.setPage(EDIT_ROLE_PAGE);
-    router.setForward();
-    return router;
+    return Router.forwardTo(EDIT_ROLE_PAGE);
   }
 }

@@ -19,9 +19,6 @@ public class GetProfileCommand implements Command {
     logger.debug("Navigating to user profile page");
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, PROFILE_PAGE);
-    Router router = new Router();
-    router.setPage(PROFILE_PAGE);
-    router.setForward();
-    return router;
+    return Router.forwardTo(PROFILE_PAGE);
   }
 }

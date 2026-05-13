@@ -31,11 +31,8 @@ public class GetShoppingCartByUserCommand implements Command {
       List<ShoppingCartItemDto> shoppingCartItemDtoList = shoppingCartService.findAllDtoByUserId(userId);
       request.setAttribute(SHOPPING_CART_ITEM_DTO_LIST_PARAMETER, shoppingCartItemDtoList);
       logger.debug("Retrieved {} cart items for user ID: {}", shoppingCartItemDtoList.size(), userId);
-      Router router = new Router();
-      router.setForward();
-      router.setPage(SHOPPING_CART_PAGE);
       logger.debug("Forwarding to page: {}", SHOPPING_CART_PAGE);
-      return router;
+      return Router.forwardTo(SHOPPING_CART_PAGE);
     } catch (ServiceException e) {
       logger.error("ServiceException while fetching cart for user", e);
       throw new CommandException(e);

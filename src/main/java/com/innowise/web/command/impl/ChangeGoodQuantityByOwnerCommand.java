@@ -19,13 +19,27 @@ public class ChangeGoodQuantityByOwnerCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing ChangeGoodQuantityByOwnerCommand");
+    String goodIdStr = request.getParameter(GOOD_ID_PARAMETER);
+    String newQuantityStr = request.getParameter(NEW_QUANTITY_PARAMETER);
+
+    if (goodIdStr == null || goodIdStr.isBlank() ||
+            newQuantityStr == null || newQuantityStr.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id and quantity are required");
+      return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
+    }
+
+    Long goodId;
+    Long newQuantity;
+    try {
+      goodId = Long.parseLong(goodIdStr);
+      newQuantity = Long.parseLong(newQuantityStr);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id and quantity must be numbers");
+      return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto user = (UserDto) session.getAttribute(USER_PARAMETER);
     Long userId = user.getId();
-    String goodIdStr = request.getParameter(GOOD_ID_PARAMETER);
-    Long goodId = Long.parseLong(goodIdStr);
-    String newQuantityStr = request.getParameter(NEW_QUANTITY_PARAMETER);
-    Long newQuantity = Long.parseLong(newQuantityStr);
     logger.debug("Changing quantity for good ID: {} to {} by user ID: {}", goodId, newQuantity, userId);
     GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     try {

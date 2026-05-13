@@ -14,7 +14,6 @@ import java.io.IOException;
 import static com.innowise.web.config.PublicConstants.MAIN_PAGE;
 import static com.innowise.web.config.PublicConstants.USER_PARAMETER;
 
-@WebFilter(urlPatterns = {"/pages/admin/*"})
 public class AdminAccessFilter implements Filter {
   private static final Logger logger = LogManager.getLogger(AdminAccessFilter.class);
 

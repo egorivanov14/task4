@@ -24,11 +24,11 @@ public class GetGoodDetailListCommand implements Command {
     logger.debug("Executing GetGoodListCommand");
     HttpSession session = request.getSession();
     session.setAttribute(CURRENT_PAGE_PARAMETER, GOOD_DETAIL_LIST_PAGE);
-    GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     List<GoodDetailDto> goodDetailDtoList;
     try {
       UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
       Long userId = userDto.getId();
+      GoodServiceImpl goodService = GoodServiceImpl.getInstance();
       goodDetailDtoList = goodService.getGoodDtoListWithUsername(userId);
       request.setAttribute(GOOD_DETAIL_DTO_LIST_PARAMETER, goodDetailDtoList);
       logger.debug("Successfully retrieved {} goods for global list", goodDetailDtoList.size());
@@ -36,9 +36,6 @@ public class GetGoodDetailListCommand implements Command {
       logger.error("Failed to fetch global goods list", e);
       throw new CommandException(e);
     }
-    Router router = new Router();
-    router.setForward();
-    router.setPage(GOOD_DETAIL_LIST_PAGE);
-    return router;
+    return Router.forwardTo(GOOD_DETAIL_LIST_PAGE);
   }
 }

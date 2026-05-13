@@ -21,9 +21,6 @@ public class LogoutCommand implements Command {
     String username = user.getUsername();
     logger.info("User '{}' logging out", username);
     request.getSession().invalidate();
-    Router router = new Router();
-    router.setPage(request.getContextPath() + LOGIN_PAGE);
-    router.setRedirect();
-    return router;
+    return Router.redirectTo(request.getContextPath() + LOGIN_PAGE);
   }
 }

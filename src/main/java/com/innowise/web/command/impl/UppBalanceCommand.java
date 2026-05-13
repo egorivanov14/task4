@@ -18,12 +18,24 @@ public class UppBalanceCommand implements Command {
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException { // todo logs
+    String amountStr = request.getParameter(AMOUNT_PARAMETER);
+
+    if (amountStr == null || amountStr.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "amount is required");
+      return Router.forwardTo(UPP_BALANCE_PAGE);
+    }
+
+    Long amount;
+    try {
+      amount = Long.valueOf(amountStr);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "amount must be a number");
+      return Router.forwardTo(UPP_BALANCE_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto user = (UserDto) session.getAttribute(USER_PARAMETER);
     try {
       Long userId = user.getId();
-      String amountStr = request.getParameter(AMOUNT_PARAMETER);
-      Long amount = Long.valueOf(amountStr);
       UserBalanceServiceImpl userBalanceService = UserBalanceServiceImpl.getInstance();
       if (userBalanceService.uppBalance(userId, amount)) {
         request.setAttribute(MESSAGE_PARAMETER, "balance updated");
@@ -32,10 +44,7 @@ public class UppBalanceCommand implements Command {
       } else {
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to upp balance");
       }
-      Router router = new Router();
-      router.setForward();
-      router.setPage(UPP_BALANCE_PAGE);
-      return router;
+      return Router.forwardTo(UPP_BALANCE_PAGE);
     } catch (ServiceException e) {
       throw new CommandException(e);
     }

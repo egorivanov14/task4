@@ -2,7 +2,6 @@ package com.innowise.web.controller.filter;
 
 import com.innowise.web.dto.UserDto;
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import static com.innowise.web.config.PublicConstants.LOGIN_PAGE;
 import static com.innowise.web.config.PublicConstants.USER_PARAMETER;
 
-@WebFilter(urlPatterns = {"/pages/admin/*", "/pages/user/*, /pages/good/*, /controller"})
 public class AuthentificationFilter implements Filter {
   private static final Logger logger = LogManager.getLogger(AuthentificationFilter.class);
 

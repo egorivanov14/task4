@@ -19,13 +19,25 @@ public class DeleteGoodByAdminCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing DeleteGoodByAdminCommand");
-    GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     String goodIdStr = request.getParameter(GOOD_ID_PARAMETER);
-    Long goodId = Long.parseLong(goodIdStr);
+
+    if (goodIdStr == null || goodIdStr.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id is required");
+      return Router.forwardTo(GOOD_DETAIL_LIST_PAGE);
+    }
+
+    Long goodId;
+    try {
+      goodId = Long.parseLong(goodIdStr);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id must be a number");
+      return Router.forwardTo(GOOD_DETAIL_LIST_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto currentUser = (UserDto) session.getAttribute(USER_PARAMETER);
-    Router router = new Router();
+    Router router;
     try {
+      GoodServiceImpl goodService = GoodServiceImpl.getInstance();
       if (goodService.deleteById(goodId, currentUser)) {
         logger.info("Good ID: {} successfully deleted by user: {}", goodId, currentUser.getUsername());
         request.setAttribute(INFO_MESSAGE_PARAMETER, "good successfully deleted");
@@ -33,13 +45,12 @@ public class DeleteGoodByAdminCommand implements Command {
         router = command.execute(request);
       } else {
         logger.warn("Failed to delete good ID: {} by user: {}", goodId, currentUser.getUsername());
-        router.setForward();
-        router.setPage(GOOD_DETAIL_LIST_PAGE);
+        router = Router.forwardTo(GOOD_DETAIL_LIST_PAGE);
       }
       return router;
     } catch (ServiceException e) {
       logger.error("ServiceException while deleting good ID: {} by user: {}", goodId, currentUser.getUsername(), e);
-      throw new RuntimeException(e);
+      throw new CommandException(e);
     }
   }
 }

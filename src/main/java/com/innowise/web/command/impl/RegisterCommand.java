@@ -18,12 +18,18 @@ public class RegisterCommand implements Command {
 
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
-    UserService userService = UserServiceImpl.getInstance();
     String username = request.getParameter(USERNAME_PARAMETER);
-    logger.debug("Executing RegisterCommand for user: {}", username);
     String password = request.getParameter(PASSWORD_PARAMETER);
-    Router router = new Router();
+
+    if (username == null || username.isBlank() ||
+            password == null || password.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "username and password are required");
+      return Router.forwardTo(REGISTER_PAGE);
+    }
+    logger.debug("Executing RegisterCommand for user: {}", username);
+    Router router;
     try {
+      UserService userService = UserServiceImpl.getInstance();
       if (userService.register(username, password)) {
         logger.info("Successfully registered user: {}", username);
         SetUserToSessionCommand setUserToSessionCommand = new SetUserToSessionCommand();
@@ -33,8 +39,7 @@ public class RegisterCommand implements Command {
       } else {
         logger.warn("Registration failed for user: {} (duplicate or invalid input)", username);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "user with this username already exists or you wrote null values");
-        router.setPage(REGISTER_PAGE);
-        router.setForward();
+        router = Router.forwardTo(REGISTER_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during registration of user: '{}'", username, e);

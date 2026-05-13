@@ -22,11 +22,28 @@ public class AddGoodCommand implements Command {
     logger.debug("Executing AddGoodCommand");
     String name = request.getParameter(NAME_PARAMETER);
     String priceStr = request.getParameter(PRICE_PARAMETER);
-    Long price = Long.parseLong(priceStr);
     String quantityStr = request.getParameter(QUANTITY_PARAMETER);
-    Long quantity = Long.parseLong(quantityStr);
     String manufacturer = request.getParameter(MANUFACTURER_PARAMETER);
     String description = request.getParameter(DESCRIPTION_PARAMETER);
+
+    if (name == null || name.isBlank() ||
+            priceStr == null || priceStr.isBlank() ||
+            quantityStr == null || quantityStr.isBlank() ||
+            manufacturer == null || manufacturer.isBlank() ||
+            description == null || description.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "all fields are required");
+      return Router.forwardTo(ADD_GOOD_PAGE);
+    }
+
+    Long price;
+    Long quantity;
+    try {
+      price = Long.parseLong(priceStr);
+      quantity = Long.parseLong(quantityStr);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "price and quantity must be numbers");
+      return Router.forwardTo(ADD_GOOD_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
     Long userId = userDto.getId();
@@ -45,9 +62,6 @@ public class AddGoodCommand implements Command {
       logger.error("Service error during good addition", e);
       throw new CommandException(e);
     }
-    Router router = new Router();
-    router.setForward();
-    router.setPage(ADD_GOOD_PAGE);
-    return router;
+    return Router.forwardTo(ADD_GOOD_PAGE);
   }
 }

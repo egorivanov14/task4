@@ -4,11 +4,26 @@ public class Router {
   String page;
   Action action;
 
-  public Router() {}
+  public Router() {
+  }
 
   public Router(String page, Action action) {
     this.page = page;
     this.action = action;
+  }
+
+  public static Router forwardTo(String page) {
+    Router router = new Router();
+    router.setForward();
+    router.page = page;
+    return router;
+  }
+
+  public static Router redirectTo(String page) {
+    Router router = new Router();
+    router.setRedirect();
+    router.page = page;
+    return router;
   }
 
   public String getPage() {

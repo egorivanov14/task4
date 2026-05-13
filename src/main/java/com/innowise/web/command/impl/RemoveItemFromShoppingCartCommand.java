@@ -19,13 +19,25 @@ public class RemoveItemFromShoppingCartCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing RemoveItemFromShoppingCartCommand");
+    String goodIdString = request.getParameter(GOOD_ID_PARAMETER);
+
+    if (goodIdString == null || goodIdString.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id is required");
+      return Router.forwardTo(SHOPPING_CART_PAGE);
+    }
+
+    Long goodId;
+    try {
+      goodId = Long.parseLong(goodIdString);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id must be a number");
+      return Router.forwardTo(SHOPPING_CART_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto user = (UserDto) session.getAttribute(USER_PARAMETER);
     try {
       ShoppingCartServiceImpl shoppingCartService = ShoppingCartServiceImpl.getInstance();
       Long userId = user.getId();
-      String goodIdString = request.getParameter(GOOD_ID_PARAMETER);
-      Long goodId = Long.parseLong(goodIdString);
       logger.debug("Removing good ID: {} from cart of user ID: {}", goodId, userId);
       if (!shoppingCartService.removeItem(userId, goodId)) {
         logger.warn("Failed to remove good ID: {} from cart of user ID: {}", goodId, userId);

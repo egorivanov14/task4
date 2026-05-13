@@ -20,8 +20,19 @@ public class DeleteGoodCommand implements Command {
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing DeleteGoodByIdCommand");
     String idStr = request.getParameter(GOOD_ID_PARAMETER);
-    Long goodId = Long.parseLong(idStr);
-    Router router = new Router();
+    if (idStr == null || idStr.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id is required");
+      return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
+    }
+
+    Long goodId;
+    try {
+      goodId = Long.parseLong(idStr);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id must be a number");
+      return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
+    }
+    Router router;
     try {
       logger.debug("Attempting to deleteById good ID: {}", goodId);
       HttpSession session = request.getSession();
@@ -35,8 +46,7 @@ public class DeleteGoodCommand implements Command {
       } else {
         logger.warn("Good ID: {} deletion failed", goodId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to deleteById good, try again");
-        router.setForward();
-        router.setPage(GOOD_LIST_BY_USER_PAGE);
+        router = Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error while deleting good ID: {}", goodId, e);

@@ -18,15 +18,29 @@ public class OrderItemCommand implements Command {
   private static final Logger logger = LogManager.getLogger(OrderItemCommand.class);
 
   @Override
-  public Router execute(HttpServletRequest request) throws CommandException {
+  public Router execute(HttpServletRequest request) throws CommandException { // todo logs
+    String goodIdStr = request.getParameter(GOOD_ID_PARAMETER);
+    String amountStr = request.getParameter(AMOUNT_PARAMETER);
+
+    if (goodIdStr == null || goodIdStr.isBlank() ||
+            amountStr == null || amountStr.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id and amount are required");
+      return Router.forwardTo(SHOPPING_CART_PAGE);
+    }
+
+    Long goodId;
+    Long amount;
+    try {
+      goodId = Long.valueOf(goodIdStr);
+      amount = Long.valueOf(amountStr);
+    } catch (NumberFormatException e) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id and amount must be numbers");
+      return Router.forwardTo(SHOPPING_CART_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto user = (UserDto) session.getAttribute(USER_PARAMETER);
     try {
       Long userId = user.getId();
-      String goodIdStr = request.getParameter(GOOD_ID_PARAMETER);
-      Long goodId = Long.valueOf(goodIdStr);
-      String amountStr = request.getParameter(AMOUNT_PARAMETER);
-      Long amount = Long.valueOf(amountStr);
       ShoppingCartServiceImpl shoppingCartService = ShoppingCartServiceImpl.getInstance();
       if (shoppingCartService.order(userId, goodId, amount)) {
         request.setAttribute(MESSAGE_PARAMETER, "successful order");
@@ -39,7 +53,7 @@ public class OrderItemCommand implements Command {
       GetShoppingCartByUserCommand getShoppingCartByUserCommand = new GetShoppingCartByUserCommand();
       return getShoppingCartByUserCommand.execute(request);
     } catch (ServiceException e) {
-      throw new RuntimeException(e);
+      throw new CommandException(e);
     }
   }
 }

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.routing.Route;
 
 import static com.innowise.web.config.PublicConstants.*;
 
@@ -29,13 +30,11 @@ public class DeleteCurrentUserCommand implements Command {
       if (userService.deleteUserById(userId, currentUser)) {
         logger.info("User ID: {} successfully deleted (self-service)", userId);
         session.invalidate();
-        router.setPage(request.getContextPath() + LOGIN_PAGE);
-        router.setRedirect();
+        router = Router.redirectTo(request.getContextPath() + LOGIN_PAGE);
       } else {
         logger.warn("User ID: {} deletion failed at database layer", userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to deleteById user, try again");
-        router.setPage(PROFILE_PAGE);
-        router.setForward();
+        router = Router.forwardTo(PROFILE_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error while deleting user ID: {}", userId, e);

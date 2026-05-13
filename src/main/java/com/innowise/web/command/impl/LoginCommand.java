@@ -4,7 +4,6 @@ import com.innowise.web.command.Command;
 import com.innowise.web.controller.router.Router;
 import com.innowise.web.exception.CommandException;
 import com.innowise.web.exception.ServiceException;
-import com.innowise.web.service.impl.UserBalanceServiceImpl;
 import com.innowise.web.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,10 +18,16 @@ public class LoginCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     String username = request.getParameter(USERNAME_PARAMETER);
-    logger.debug("Executing LoginCommand for user: {}", username);
     String password = request.getParameter(PASSWORD_PARAMETER);
+
+    if (username == null || username.isBlank() ||
+            password == null || password.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "username and password are required");
+      return Router.forwardTo(LOGIN_PAGE);
+    }
+    logger.debug("Executing LoginCommand for user: {}", username);
     UserServiceImpl userService = UserServiceImpl.getInstance();
-    Router router = new Router();
+    Router router;
     try {
       if (userService.login(username, password)) {
         logger.info("Successful authentication for user: {}", username);
@@ -33,8 +38,7 @@ public class LoginCommand implements Command {
       } else {
         logger.warn("Failed login attempt for user: {}", username);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to login");
-        router.setPage(LOGIN_PAGE);
-        router.setForward();
+        router = Router.forwardTo(LOGIN_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during login for user: '{}'", username, e);

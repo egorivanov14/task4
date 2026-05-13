@@ -34,9 +34,6 @@ public class GetGoodDtoListByUserCommand implements Command {
       request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to get goods");
       throw new CommandException(e);
     }
-    Router router = new Router();
-    router.setForward();
-    router.setPage(GOOD_LIST_BY_USER_PAGE);
-    return router;
+    return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
   }
 }

@@ -20,29 +20,31 @@ public class UpdateUsernameCommand implements Command {
   @Override
   public Router execute(HttpServletRequest request) throws CommandException {
     logger.debug("Executing UpdateUsernameCommand");
+    String newUsername = request.getParameter(USERNAME_PARAMETER);
+
+    if (newUsername == null || newUsername.isBlank()) {
+      request.setAttribute(ERROR_MESSAGE_PARAMETER, "username is required");
+      return Router.forwardTo(PROFILE_PAGE);
+    }
     HttpSession session = request.getSession();
     UserDto userDto = (UserDto) session.getAttribute(USER_PARAMETER);
     Long userId = userDto.getId();
     String oldUsername = userDto.getUsername();
-    String newUsername = request.getParameter(USERNAME_PARAMETER);
     UserService userService = UserServiceImpl.getInstance();
-    try{
+    try {
       logger.debug("Attempting username change for user ID: {} '{}' -> '{}'", userId, oldUsername, newUsername);
-      if(userService.updateUsername(userId, newUsername)){
+      if (userService.updateUsername(userId, newUsername)) {
         logger.info("Username successfully updated for user ID: {} '{}' -> '{}'", userId, oldUsername, newUsername);
         userDto.setUsername(newUsername);
         session.setAttribute(USER_PARAMETER, userDto);
-      }else {
+      } else {
         logger.warn("Username update failed at service layer for user ID: {}", userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to update username");
       }
-    }catch (ServiceException e){
+    } catch (ServiceException e) {
       logger.error("Service error during username update for user ID: {}", userId, e);
       throw new CommandException(e);
     }
-    Router router = new Router();
-    router.setForward();
-    router.setPage(PROFILE_PAGE);
-    return router;
+    return Router.forwardTo(PROFILE_PAGE);
   }
 }
