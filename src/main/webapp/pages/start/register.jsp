@@ -7,9 +7,9 @@
 <form action="${pageContext.request.contextPath}/controller" method="post">
     <h1>Регистрация</h1>
     <input type="hidden" name="command" value="register"/>
-    <input type="text" name="username" placeholder="user name"/>
+    <input type="text" name="username" placeholder="user name" required/>
     <br/>
-    <input type="password" name="password" placeholder="password"/>
+    <input type="password" name="password" placeholder="password" required/>
     <br/>
     <input type="submit" value="Зарегистрироваться"/>
     <br/>

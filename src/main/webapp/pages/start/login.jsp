@@ -8,9 +8,9 @@
     <h1>Вход</h1>
     <hr/>
     <input type="hidden" name="command" value="login"/>
-    <input type="text" name="username" placeholder="user name"/>
+    <input type="text" name="username" placeholder="user name" required/>
     <br/>
-    <input type="password" name="password" placeholder="password"/>
+    <input type="password" name="password" placeholder="password" required/>
     <hr/>
     <input type="submit" value="Войти"/>
     <br/>
