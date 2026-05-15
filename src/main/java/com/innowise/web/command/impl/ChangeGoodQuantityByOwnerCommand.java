@@ -43,13 +43,13 @@ public class ChangeGoodQuantityByOwnerCommand implements Command {
     logger.debug("Changing quantity for good ID: {} to {} by user ID: {}", goodId, newQuantity, userId);
     GoodServiceImpl goodService = GoodServiceImpl.getInstance();
     try {
-      if (!goodService.changeQuantity(userId, goodId, newQuantity)) {
+      if (goodService.changeQuantity(userId, goodId, newQuantity)) {
+        return Router.redirectTo(request.getContextPath() + GET_GOOD_DTO_LIST_BY_USER_COMMAND);
+      } else {
         logger.warn("Failed to change quantity for good ID: {} by user ID: {}", goodId, userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to change good quantity");
+        return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
       }
-      GetGoodDtoListByUserCommand command = new GetGoodDtoListByUserCommand();
-      logger.debug("Forwarding to GetGoodDtoListByUserCommand");
-      return command.execute(request);
     } catch (ServiceException e) {
       logger.error("ServiceException while changing quantity for good ID: {} by user ID: {}", goodId, userId, e);
       throw new CommandException(e);

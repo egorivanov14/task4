@@ -37,14 +37,15 @@ public class UpdateUsernameCommand implements Command {
         logger.info("Username successfully updated for user ID: {} '{}' -> '{}'", userId, oldUsername, newUsername);
         userDto.setUsername(newUsername);
         session.setAttribute(USER_PARAMETER, userDto);
+        return Router.redirectTo(request.getContextPath() + GO_TO_PROFILE_COMMAND);
       } else {
         logger.warn("Username update failed at service layer for user ID: {}", userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to update username");
+        return Router.forwardTo(PROFILE_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during username update for user ID: {}", userId, e);
       throw new CommandException(e);
     }
-    return Router.forwardTo(PROFILE_PAGE);
   }
 }

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.innowise.web.config.PublicConstants.LOGIN_PAGE;
+import static com.innowise.web.config.PublicConstants.GO_TO_LOGIN_COMMAND;
 import static com.innowise.web.config.PublicConstants.USER_PARAMETER;
 
 public class LogoutCommand implements Command {
@@ -21,6 +21,6 @@ public class LogoutCommand implements Command {
     String username = user.getUsername();
     logger.info("User '{}' logging out", username);
     request.getSession().invalidate();
-    return Router.redirectTo(request.getContextPath() + LOGIN_PAGE);
+    return Router.redirectTo(request.getContextPath() + GO_TO_LOGIN_COMMAND);
   }
 }

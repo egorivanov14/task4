@@ -15,6 +15,6 @@
     <br/>
     ${error_msg}
 </form>
-<a href="${pageContext.request.contextPath}/pages/start/login.jsp">Войти</a>
+<a href="${pageContext.request.contextPath}/controller?command=go_to_login">Войти</a>
 </body>
 </html>

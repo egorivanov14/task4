@@ -53,15 +53,15 @@ public class AddGoodCommand implements Command {
       if (goodService.add(good)) {
         logger.info("Good '{}' successfully added by user ID: {}", name, userId);
         session.setAttribute(CURRENT_PAGE_PARAMETER, ADD_GOOD_PAGE);
-        request.setAttribute(INFO_MESSAGE_PARAMETER, "good added");
+        return Router.redirectTo(request.getContextPath() + GO_TO_ADD_GOOD_COMMAND);
       } else {
         logger.warn("Failed to add good '{}' for user ID: {}", name, userId);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good to shopping cart");
+        return Router.forwardTo(ADD_GOOD_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during good addition", e);
       throw new CommandException(e);
     }
-    return Router.forwardTo(ADD_GOOD_PAGE);
   }
 }

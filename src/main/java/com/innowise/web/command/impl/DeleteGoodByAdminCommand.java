@@ -35,19 +35,16 @@ public class DeleteGoodByAdminCommand implements Command {
     }
     HttpSession session = request.getSession();
     UserDto currentUser = (UserDto) session.getAttribute(USER_PARAMETER);
-    Router router;
     try {
       GoodServiceImpl goodService = GoodServiceImpl.getInstance();
       if (goodService.deleteById(goodId, currentUser)) {
         logger.info("Good ID: {} successfully deleted by user: {}", goodId, currentUser.getUsername());
-        request.setAttribute(INFO_MESSAGE_PARAMETER, "good successfully deleted");
-        GetGoodDetailListCommand command = new GetGoodDetailListCommand();
-        router = command.execute(request);
+        return Router.redirectTo(request.getContextPath() + GET_GOOD_DETAIL_LIST_COMMAND);
       } else {
         logger.warn("Failed to delete good ID: {} by user: {}", goodId, currentUser.getUsername());
-        router = Router.forwardTo(GOOD_DETAIL_LIST_PAGE);
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to delete good");
+        return Router.forwardTo(GOOD_DETAIL_LIST_PAGE);
       }
-      return router;
     } catch (ServiceException e) {
       logger.error("ServiceException while deleting good ID: {} by user: {}", goodId, currentUser.getUsername(), e);
       throw new CommandException(e);

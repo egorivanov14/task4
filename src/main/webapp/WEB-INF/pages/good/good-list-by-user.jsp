@@ -9,7 +9,7 @@
 <c:choose>
     <c:when test="${empty good_dto_list}">
         <p>Нет товаров</p>
-        <a href="${pageContext.request.contextPath}/pages/good/add-good.jsp">добавить товар</a>
+        <a href="${pageContext.request.contextPath}/controller?command=go_to_add_good">добавить товар</a>
     </c:when>
     <c:otherwise>
         <table>
@@ -50,6 +50,6 @@
     </c:otherwise>
 </c:choose>
 <hr/>
-<a href="${pageContext.request.contextPath}/pages/user/main.jsp">На главную</a>
+<a href="${pageContext.request.contextPath}/controller?command=go_to_main">На главную</a>
 </body>
 </html>

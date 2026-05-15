@@ -35,14 +35,16 @@ public class EditRoleCommand implements Command {
     logger.info("Role change attempt by admin '{}' -> user '{}', target role: {}",
             currentUser.getUsername(), toUserName, role);
     try {
-      if (!userService.setRole(currentUser, toUserName, role)) {
+      if (userService.setRole(currentUser, toUserName, role)) {
+        return Router.redirectTo(request.getContextPath() + GO_TO_EDIT_ROLE_COMMAND);
+      } else {
         logger.warn("Role assignment failed or denied for user: {}", toUserName);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "Failed to change role");
+        return Router.forwardTo(EDIT_ROLE_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during role edit for user: {}", toUserName, e);
       throw new CommandException(e);
     }
-    return Router.forwardTo(EDIT_ROLE_PAGE);
   }
 }

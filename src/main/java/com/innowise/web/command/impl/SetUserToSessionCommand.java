@@ -44,6 +44,6 @@ public class SetUserToSessionCommand implements Command {
       logger.error("Failed to fetch user data for session binding: '{}'", username, e);
       throw new CommandException(e);
     }
-    return Router.redirectTo(request.getContextPath() + MAIN_PAGE);
+    return Router.redirectTo(request.getContextPath() + GO_TO_MAIN_COMMAND);
   }
 }

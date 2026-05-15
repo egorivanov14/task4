@@ -38,13 +38,13 @@ public class UppBalanceCommand implements Command {
       Long userId = user.getId();
       UserBalanceServiceImpl userBalanceService = UserBalanceServiceImpl.getInstance();
       if (userBalanceService.uppBalance(userId, amount)) {
-        request.setAttribute(MESSAGE_PARAMETER, "balance updated");
         Long balance = userBalanceService.getBalanceByUserId(userId);
         session.setAttribute(BALANCE_PARAMETER, balance);
+        return Router.redirectTo(request.getContextPath() + GO_TO_UPP_BALANCE_COMMAND);
       } else {
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to upp balance");
+        return Router.forwardTo(UPP_BALANCE_PAGE);
       }
-      return Router.forwardTo(UPP_BALANCE_PAGE);
     } catch (ServiceException e) {
       throw new CommandException(e);
     }

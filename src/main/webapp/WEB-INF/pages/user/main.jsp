@@ -7,7 +7,7 @@
 <body>
 <c:if test="${user.admin}">
     <ul>
-        <li><a href="${pageContext.request.contextPath}/pages/admin/edit-role.jsp">Страница смены роли</a></li>
+        <li><a href="${pageContext.request.contextPath}/controller?command=go_to_edit_role">Страница смены роли</a></li>
         <li><a href="${pageContext.request.contextPath}/controller?command=get_user_list">Страница всех
             пользователей</a></li>
         <li><a href="${pageContext.request.contextPath}/controller?command=get_good_detail_list">Список товаров</a></li>
@@ -15,10 +15,10 @@
 </c:if>
 <ul>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_profile">Профиль пользователя</a></li>
-    <li><a href="${pageContext.request.contextPath}/pages/good/add-good.jsp">Создать товар</a></li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=go_to_add_good">Создать товар</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_good_dto_list_by_user">Посмотреть мои
         товары</a></li>
-    <li><a href="${pageContext.request.contextPath}/pages/balance/upp-balance.jsp">Пополнить баланс</a></li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=go_to_upp_balance">Пополнить баланс</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_available_good_dto_list">Маркетплейс</a></li>
     <li><a href="${pageContext.request.contextPath}/controller?command=get_shopping_cart_by_user">Корзина</a></li>
 </ul>

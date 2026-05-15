@@ -55,6 +55,6 @@
     </c:otherwise>
 </c:choose>
 <hr/>
-<a href="${pageContext.request.contextPath}/pages/user/main.jsp">На главную</a>
+<a href="${pageContext.request.contextPath}/controller?command=go_to_main">На главную</a>
 </body>
 </html>

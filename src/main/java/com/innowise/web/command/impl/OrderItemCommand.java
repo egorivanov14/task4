@@ -43,15 +43,14 @@ public class OrderItemCommand implements Command {
       Long userId = user.getId();
       ShoppingCartServiceImpl shoppingCartService = ShoppingCartServiceImpl.getInstance();
       if (shoppingCartService.order(userId, goodId, amount)) {
-        request.setAttribute(MESSAGE_PARAMETER, "successful order");
         UserBalanceServiceImpl userBalanceService = UserBalanceServiceImpl.getInstance();
         Long balance = userBalanceService.getBalanceByUserId(userId);
         session.setAttribute(BALANCE_PARAMETER, balance);
+        return Router.redirectTo(request.getContextPath() + GET_SHOPPING_CART_BY_USER_COMMAND);
       } else {
         request.setAttribute(MESSAGE_PARAMETER, "failed to order");
+        return Router.forwardTo(SHOPPING_CART_PAGE);
       }
-      GetShoppingCartByUserCommand getShoppingCartByUserCommand = new GetShoppingCartByUserCommand();
-      return getShoppingCartByUserCommand.execute(request);
     } catch (ServiceException e) {
       throw new CommandException(e);
     }

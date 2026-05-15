@@ -25,6 +25,13 @@ public enum CommandType {
   REMOVE_ITEM_FROM_SHOPPING_CART(new RemoveItemFromShoppingCartCommand()),
   UPP_BALANCE(new UppBalanceCommand()),
   ORDER_ITEM(new OrderItemCommand()),
+  GO_TO_LOGIN(new GoToLoginCommand()),
+  GO_TO_REGISTER(new GoToRegisterCommand()),
+  GO_TO_MAIN(new GoToMainCommand()),
+  GO_TO_EDIT_ROLE(new GoToEditRoleCommand()),
+  GO_TO_UPP_BALANCE(new GoToUppBalanceCommand()),
+  GO_TO_ADD_GOOD(new GoToAddGoodCommand()),
+  GO_TO_PROFILE(new GoToProfileCommand()),
   UPDATE_USERNAME(new UpdateUsernameCommand());
 
   private final Command command;

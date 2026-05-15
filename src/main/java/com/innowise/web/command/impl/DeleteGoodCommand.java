@@ -32,7 +32,6 @@ public class DeleteGoodCommand implements Command {
       request.setAttribute(ERROR_MESSAGE_PARAMETER, "good id must be a number");
       return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
     }
-    Router router;
     try {
       logger.debug("Attempting to deleteById good ID: {}", goodId);
       HttpSession session = request.getSession();
@@ -40,18 +39,15 @@ public class DeleteGoodCommand implements Command {
       GoodServiceImpl goodService = GoodServiceImpl.getInstance();
       if (goodService.deleteById(goodId, currentUser)) {
         logger.info("Good ID: {} successfully deleted", goodId);
-        request.setAttribute(INFO_MESSAGE_PARAMETER, "good deleted successfully");
-        GetGoodDtoListByUserCommand getGoodDtoListByUserCommand = new GetGoodDtoListByUserCommand();
-        router = getGoodDtoListByUserCommand.execute(request);
+        return Router.redirectTo(request.getContextPath() + GET_GOOD_DTO_LIST_BY_USER_COMMAND);
       } else {
         logger.warn("Good ID: {} deletion failed", goodId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to deleteById good, try again");
-        router = Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
+        return Router.forwardTo(GOOD_LIST_BY_USER_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error while deleting good ID: {}", goodId, e);
       throw new CommandException(e);
     }
-    return router;
   }
 }

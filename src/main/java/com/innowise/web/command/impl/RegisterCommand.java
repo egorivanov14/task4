@@ -38,7 +38,7 @@ public class RegisterCommand implements Command {
         session.setAttribute(CURRENT_PAGE_PARAMETER, MAIN_PAGE);
       } else {
         logger.warn("Registration failed for user: {} (duplicate or invalid input)", username);
-        request.setAttribute(ERROR_MESSAGE_PARAMETER, "user with this username already exists or you wrote null values");
+        request.setAttribute(ERROR_MESSAGE_PARAMETER, "user with this username already exists or exception on the server side");
         router = Router.forwardTo(REGISTER_PAGE);
       }
     } catch (ServiceException e) {

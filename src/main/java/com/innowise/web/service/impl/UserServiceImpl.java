@@ -39,15 +39,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public boolean register(String username, String password) throws ServiceException { // todo logs
     logger.debug("Registration attempt for user: {}", username);
-    if (username == null || password == null) {
-      logger.warn("Registration failed: null credentials provided");
-      return false;
-    }
     ConnectionPool connectionPool = ConnectionPool.getInstance();
     Connection connection = connectionPool.getConnection();
     try {
       UserDaoImpl userDao = UserDaoImpl.getInstance();
-      if (userDao.deleteUserByUsername(username)) {
+      if (userDao.existsByUsername(username)) {
         logger.warn("Registration failed: user '{}' already exists", username);
         return false;
       }
@@ -86,10 +82,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public boolean login(String username, String password) throws ServiceException {
     logger.debug("Login attempt for user: {}", username);
-    if (username == null || password == null) {
-      logger.warn("Login failed: null credentials provided");
-      return false;
-    }
     UserDaoImpl userDao = UserDaoImpl.getInstance();
     try {
       Optional<User> userOptional = userDao.findByUsername(username);

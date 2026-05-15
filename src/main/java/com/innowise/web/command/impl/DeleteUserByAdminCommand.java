@@ -33,7 +33,6 @@ public class DeleteUserByAdminCommand implements Command {
       request.setAttribute(ERROR_MESSAGE_PARAMETER, "user id must be a number");
       return Router.forwardTo(USER_LIST_PAGE);
     }
-    Router router;
     try {
       logger.debug("Admin attempting to deleteById user ID: {}", userId);
       UserService userService = UserServiceImpl.getInstance();
@@ -41,18 +40,15 @@ public class DeleteUserByAdminCommand implements Command {
       UserDto currentUser = (UserDto) session.getAttribute(USER_PARAMETER);
       if (userService.deleteUserById(userId, currentUser)) {
         logger.info("Admin successfully deleted user ID: {}", userId);
-        request.setAttribute(MESSAGE_PARAMETER, "user deleted successfully");
-        GetUserListCommand getUserListCommand = new GetUserListCommand();
-        router = getUserListCommand.execute(request);
+        return Router.redirectTo(request.getContextPath() + GET_USER_LIST_COMMAND);
       } else {
         logger.warn("Admin failed to deleteById user ID: {}", userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to deleteById user, try again");
-        router = Router.forwardTo(USER_LIST_PAGE);
+        return Router.forwardTo(USER_LIST_PAGE);
       }
     } catch (ServiceException e) {
       logger.error("Service error during admin deletion of user ID: {}", userId, e);
       throw new CommandException(e);
     }
-    return router;
   }
 }

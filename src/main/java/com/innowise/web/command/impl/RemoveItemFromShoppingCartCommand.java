@@ -39,13 +39,14 @@ public class RemoveItemFromShoppingCartCommand implements Command {
       ShoppingCartServiceImpl shoppingCartService = ShoppingCartServiceImpl.getInstance();
       Long userId = user.getId();
       logger.debug("Removing good ID: {} from cart of user ID: {}", goodId, userId);
-      if (!shoppingCartService.removeItem(userId, goodId)) {
+      if (shoppingCartService.removeItem(userId, goodId)) {
+        logger.debug("Forwarding to GetShoppingCartByUserCommand");
+        return Router.redirectTo(request.getContextPath() + GET_SHOPPING_CART_BY_USER_COMMAND);
+      } else {
         logger.warn("Failed to remove good ID: {} from cart of user ID: {}", goodId, userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to remove");
+        return Router.forwardTo(SHOPPING_CART_PAGE);
       }
-      GetShoppingCartByUserCommand command = new GetShoppingCartByUserCommand();
-      logger.debug("Forwarding to GetShoppingCartByUserCommand");
-      return command.execute(request);
     } catch (ServiceException e) {
       logger.error("ServiceException while removing item from cart", e);
       throw new CommandException(e);

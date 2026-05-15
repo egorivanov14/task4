@@ -38,13 +38,13 @@ public class AddShoppingCartItemFromCartCommand implements Command {
     logger.debug("Adding good ID: {} to cart for user ID: {}", goodId, userId);
     try {
       ShoppingCartServiceImpl shoppingCartService = ShoppingCartServiceImpl.getInstance();
-      if (!shoppingCartService.add(userId, goodId)) {
+      if (shoppingCartService.add(userId, goodId)) {
+        return Router.redirectTo(request.getContextPath() + GET_SHOPPING_CART_BY_USER_COMMAND);
+      } else {
         logger.warn("Failed to add good ID: {} to shopping cart for user ID: {}", goodId, userId);
         request.setAttribute(ERROR_MESSAGE_PARAMETER, "failed to add good to shopping cart");
+        return Router.forwardTo(SHOPPING_CART_PAGE);
       }
-      GetShoppingCartByUserCommand getShoppingCartByUserCommand = new GetShoppingCartByUserCommand();
-      logger.debug("Forwarding to GetShoppingCartByUserCommand");
-      return getShoppingCartByUserCommand.execute(request);
     } catch (ServiceException e) {
       logger.error("ServiceException while adding good ID: {} to cart for user ID: {}", goodId, userId, e);
       throw new CommandException(e);
