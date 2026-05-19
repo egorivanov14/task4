@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-<div class="card">
+<div class="login-register-card">
     <p class="main-message">Войти</p>
 
-    <form action="${pageContext.request.contextPath}/controller" method="post" class="login-form">
+    <form action="${pageContext.request.contextPath}/controller" method="post" class="login-register-form">
         <input type="hidden" name="command" value="login"/>
 
         <label for="username" class="form-label">Имя</label>
@@ -18,6 +18,8 @@
 
         <label for="password" class="form-label">Пароль</label>
         <input type="password" id="password" name="password" class="form-input" placeholder="••••••••">
+
+        <p class="error-message">${error_msg}</p>
 
         <button type="submit" class="btn btn-dark">Войти</button>
     </form>

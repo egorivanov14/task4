@@ -56,7 +56,7 @@ public class PublicConstants {
   public static final String GO_TO_LOGIN_COMMAND = "/controller?command=go_to_login";
   public static final String GO_TO_PROFILE_COMMAND = "/controller?command=go_to_profile";
   public static final String GO_TO_UPP_BALANCE_COMMAND = "/controller?command=go_to_upp_balance";
-  public static final String GET_GOOD_DETAIL_LIST_COMMAND = "/controller?command=get_good_detail-list";
+  public static final String GET_GOOD_DETAIL_LIST_COMMAND = "/controller?command=get_good_detail_list";
   public static final String GET_USER_LIST_COMMAND = "/controller?command=get_user-list";
   public static final String GET_GOOD_DTO_LIST_BY_USER_COMMAND = "/controller?command=get_good_dto_list_by_user";
   public static final String GET_SHOPPING_CART_BY_USER_COMMAND = "/controller?command=get_shopping_cart_by_user";

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-<div class="card">
+<div class="login-register-card">
     <p class="main-message">Добро пожаловать!</p>
     <p class="message">Есть аккаунт?</p>
     <a href="${pageContext.request.contextPath}/controller?command=go_to_login" class="btn btn-dark">Войти</a>

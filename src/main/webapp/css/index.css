@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Raleway:wght@300;400;500&display=swap');
 
-/* 1. Исправлена ошибка: в оригинале не было селектора перед {} */
+/* =============================================================================
+   1. ГЛОБАЛЬНЫЙ СБРОС И БАЗОВЫЕ СТИЛИ
+   ============================================================================= */
 * {
     margin: 0;
     padding: 0;
@@ -14,46 +16,154 @@ body {
     justify-content: center;
     background-color: #f5f3ee;
     font-family: 'Raleway', sans-serif;
+    padding: 20px;
+    color: #2c2c2a;
 }
 
-/* 2. Стили оригинального div, но привязаны к классу .card
-   (чтобы не ломать вёрстку на других страницах) */
-.card {
+/* =============================================================================
+   2. КАРТОЧКИ (ОБЩИЕ СТИЛИ)
+   ============================================================================= */
+.card,
+.login-register-card,
+.action-card,
+.table-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
     padding: 3rem 3.5rem;
     background-color: #ffffff;
     border: 0.5px solid #d6d3cc;
     border-radius: 4px;
-    width: 60vh;
-    height: 60vh;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-.main-message {
+/* Специфичные размеры для разных типов карточек */
+.login-register-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.action-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.table-card {
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+}
+
+/* =============================================================================
+   3. ТИПОГРАФИКА
+   ============================================================================= */
+.main-message,
+.page-title,
+.welcome-message {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
     font-weight: 400;
     color: #2c2c2a;
     margin-bottom: 0.5rem;
     letter-spacing: -0.02em;
+    text-align: center;
 }
 
-.message {
+.message,
+.subtitle {
     font-size: 0.8rem;
     font-weight: 300;
     color: #888780;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-top: 0.75rem;
+    text-align: center;
 }
 
-/* Базовый стиль кнопок-ссылок (сохраняет оригинальные размеры и шрифты) */
+.empty-message {
+    font-size: 1rem;
+    color: #888780;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* =============================================================================
+   4. ФОРМЫ И ПОЛЯ ВВОДА
+   ============================================================================= */
+.login-register-form,
+.action-form,
+.role-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2c2c2a;
+    align-self: flex-start;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    color: #2c2c2a;
+    background-color: #ffffff;
+    border: 1px solid #d6d3cc;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+}
+
+.form-input:hover {
+    border-color: #b4b2a9;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #2c2c2a;
+    box-shadow: 0 0 0 2px rgba(44, 44, 42, 0.1);
+}
+
+.form-input::placeholder {
+    color: #b4b2a9;
+    font-weight: 300;
+    font-size: 0.85rem;
+}
+
+/* Стилизация выпадающего списка <select> */
+select.form-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+/* =============================================================================
+   5. КНОПКИ
+   ============================================================================= */
 .btn {
     display: block;
-    width: 75%;
+    width: 100%;
     padding: 0.75rem 1.5rem;
     font-family: 'Raleway', sans-serif;
     font-size: 0.85rem;
@@ -65,91 +175,64 @@ body {
     border-radius: 2px;
     transition: all 0.2s ease;
     text-align: center;
+    border: none;
 }
 
-/* Тёмная кнопка (Войти)*/
-.btn-dark {
+/* Тёмная кнопка (основное действие) */
+.btn-dark,
+.btn-primary {
     background-color: #2c2c2a;
     color: #f5f3ee;
     border: 1px solid #2c2c2a;
 }
-
-.btn-dark:hover {
+.btn-dark:hover,
+.btn-primary:hover {
     background-color: #444441;
     border-color: #444441;
 }
 
-/* Контурная кнопка (Зарегистрироваться)*/
-.btn-light {
+/* Контурная кнопка (вторичное действие) */
+.btn-light,
+.btn-secondary {
     background-color: transparent;
     color: #2c2c2a;
     border: 1px solid #b4b2a9;
 }
-
-.btn-light:hover {
+.btn-light:hover,
+.btn-secondary:hover {
     border-color: #2c2c2a;
     background-color: #f5f3ee;
 }
 
-/* Стили для всей формы */
-.login-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-}
-
-/* Стиль лейбла (подписи к полю) */
-.form-label {
+/* Кнопка удаления (красная) */
+.btn-delete {
+    padding: 0.5rem 1rem;
     font-size: 0.75rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #2c2c2a;
-}
-
-/* Базовый стиль для полей ввода */
-.form-input {
-    width: 75%;
-    padding: 0.75rem 1rem;
-    font-family: 'Raleway', sans-serif;
-    font-size: 0.9rem;
-    color: #2c2c2a;
-    background-color: #ffffff;
-    border: 1px solid #d6d3cc;
-    border-radius: 2px;
+    letter-spacing: 0.03em;
+    color: #d9534f;
+    background: transparent;
+    border: 1px solid #d9534f;
+    border-radius: 3px;
+    cursor: pointer;
     transition: all 0.2s ease;
+    width: auto;
+}
+.btn-delete:hover {
+    background-color: #d9534f;
+    color: #ffffff;
 }
 
-/* Состояние при наведении на поле */
-.form-input:hover {
-    border-color: #b4b2a9;
-}
-
-/* Состояние когда поле в фокусе (кликнули, начали печатать) */
-.form-input:focus {
-    outline: none;
-    border-color: #2c2c2a;
-    box-shadow: 0 0 0 2px rgba(44, 44, 42, 0.1);
-}
-
-/* Стиль для placeholder (подсказки внутри поля) */
-.form-input::placeholder {
-    color: #b4b2a9;
-    font-weight: 300;
-    font-size: 0.85rem;
-}
-
-/* Разделитель "или" */
+/* =============================================================================
+   6. РАЗДЕЛИТЕЛИ И ДОПОЛНИТЕЛЬНЫЕ ЭЛЕМЕНТЫ
+   ============================================================================= */
 .divider {
     width: 100%;
     display: flex;
     align-items: center;
     margin: 0.5rem 0;
 }
-
 .divider::before,
 .divider::after {
     content: '';
@@ -157,7 +240,6 @@ body {
     height: 1px;
     background-color: #d6d3cc;
 }
-
 .divider-text {
     margin: 0 1rem;
     font-size: 0.7rem;
@@ -166,18 +248,194 @@ body {
     color: #888780;
 }
 
-/* Состояние ошибки для поля (добавляется классом JS или через :invalid) */
-.form-input.error {
-    border-color: #d9534f;
+.back-link,
+.footer-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #888780;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+}
+.back-link:hover,
+.footer-link:hover {
+    color: #2c2c2a;
+    text-decoration: underline;
 }
 
-.form-input.error:focus {
-    box-shadow: 0 0 0 2px rgba(217, 83, 79, 0.1);
-}
-
-/* Текст ошибки */
+/* =============================================================================
+   7. СООБЩЕНИЯ (ОШИБКИ / УСПЕХ)
+   ============================================================================= */
 .error-message {
     font-size: 0.7rem;
     color: #d9534f;
     margin-top: 0.25rem;
+    text-align: center;
+    min-height: 1em;
+}
+
+.success-message {
+    font-size: 0.7rem;
+    color: #5cb85c;
+    margin-top: 0.25rem;
+    text-align: center;
+    min-height: 1em;
+}
+
+.feedback-message {
+    font-size: 0.75rem;
+    padding: 0.6rem;
+    border-radius: 4px;
+    text-align: center;
+    min-height: 1.2em;
+    line-height: 1.4;
+    width: 100%;
+}
+.feedback-message.error {
+    color: #d9534f;
+    background-color: rgba(217, 83, 79, 0.08);
+    border: 1px solid rgba(217, 83, 79, 0.2);
+}
+.feedback-message.success {
+    color: #5cb85c;
+    background-color: rgba(92, 184, 92, 0.08);
+    border: 1px solid rgba(92, 184, 92, 0.2);
+}
+
+/* =============================================================================
+   8. ТАБЛИЦЫ
+   ============================================================================= */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 4px;
+}
+
+.goods-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.goods-table thead {
+    background-color: #fafaf9;
+    border-bottom: 2px solid #d6d3cc;
+}
+
+.goods-table th {
+    padding: 1rem 0.75rem;
+    text-align: left;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2c2c2a;
+    font-size: 0.7rem;
+}
+
+.goods-table td {
+    padding: 0.85rem 0.75rem;
+    border-bottom: 1px solid #eceae5;
+    color: #2c2c2a;
+    vertical-align: middle;
+}
+
+.goods-table tbody tr:hover {
+    background-color: #fafaf9;
+}
+
+.goods-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Стили ячеек таблицы */
+.cell-id {
+    font-family: monospace;
+    color: #888780;
+    width: 60px;
+}
+
+.cell-name {
+    font-weight: 500;
+    min-width: 150px;
+}
+
+.cell-price {
+    font-weight: 600;
+    color: #2c2c2a;
+    width: 100px;
+}
+
+.cell-quantity {
+    width: 80px;
+    text-align: center;
+}
+
+.quantity-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    background-color: #f0f0ed;
+    color: #2c2c2a;
+}
+
+.quantity-badge.out-of-stock {
+    background-color: #fff0f0;
+    color: #d9534f;
+}
+
+.cell-manufacturer,
+.cell-addedby {
+    color: #666;
+    min-width: 120px;
+}
+
+.cell-description {
+    color: #666;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cell-action {
+    width: 100px;
+    text-align: center;
+}
+
+.delete-form {
+    margin: 0;
+}
+
+/* =============================================================================
+   9. АДАПТИВНОСТЬ (МОБИЛЬНЫЕ УСТРОЙСТВА)
+   ============================================================================= */
+@media (max-width: 768px) {
+    .card,
+    .login-register-card,
+    .action-card,
+    .table-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .page-title,
+    .main-message {
+        font-size: 1.4rem;
+    }
+
+    .goods-table th,
+    .goods-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .cell-description {
+        max-width: 120px;
+    }
+
+    .btn {
+        padding: 0.85rem 0;
+    }
 }

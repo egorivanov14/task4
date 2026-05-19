@@ -34,6 +34,9 @@ public class UserBalanceServiceImpl implements UserBalanceService {
 
   @Override
   public boolean uppBalance(Long userId, Long amount) throws ServiceException { // todo logs
+    if (amount <= 0) {
+      return false;
+    }
     UserBalanceDaoImpl userBalanceDao = UserBalanceDaoImpl.getInstance();
     try {
       return userBalanceDao.updateBalanceByUserId(userId, amount);
